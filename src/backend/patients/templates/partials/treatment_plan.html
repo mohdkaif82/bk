@@ -1,0 +1,106 @@
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div>
+
+             <table style="width:100%">
+            <tr>
+                <td >
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                                                                        Treatment Plans
+                                                                </span>
+                </td>
+                <td style="text-align: right">
+                    <span class="entity-date date typename" style="text-align: right">
+                        <span class="text">Date:</span>
+                        <span class="name nowrap"> {{data.date|to_date|date:"d M, Y"}} </span>
+                    </span>
+                </td>
+
+            </tr>
+        </table>
+        </div>
+        <div class="treatmentplan typename" style="margin-top: 15px">
+            <div class="details">
+                <div class="treatment-info">
+                    <table width="100%" style="border-collapse:collapse;">
+                        <thead class="">
+                        <tr>
+                            <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Treatment</th>
+                            <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Notes</th>
+                            <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;text-align: right"> Cost<br> INR</th>
+                            <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;text-align: right"> Discount <br> INR</th>
+                            <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;text-align: right"> After discount <br> INR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% load calculate_age %}
+                        {% for treatment in data.treatment_plans %}
+                        <tr style="border-bottom: 1px solid #cfcfcf">
+                            <td  style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                                {% if treatment.procedure %}
+                                    {{treatment.procedure.name}}
+                                {% endif %}
+                            </td>
+
+                            <td style="word-break: break-word;padding:3px;padding-bottom:0;width:30%;">
+                                {% if treatment.default_notes %}
+                                    {{treatment.default_notes|safe}}
+                                {% endif %}
+                            </td>
+                            <td class="text-right " style="padding:3px;padding-bottom:0;width:15%;">
+                                {{treatment.quantity|mul_float:treatment.cost}}
+                            </td>
+                            <td class=" text-right " style="padding:3px;padding-bottom:0;width:15%;">
+                                {% if treatment.discount_type == "%" and treatment.discount %}
+                                    {{treatment.quantity|mul_float:treatment.cost|mul_float:treatment.discount|div:100|floatformat:"2"}}
+                                {% elif treatment.discount_type == "INR" and treatment.discount  %}
+                                    {{treatment.discount|floatformat:"2"}}
+                                {% else %}
+                                    0.0
+                                {% endif %}
+                            </td>
+                            <td class=" text-right " style="padding:3px;padding-bottom:0;width:15%;">
+                                {% if treatment.discount_type == "%" and treatment.discount %}
+                                    {{treatment.quantity|mul_float:treatment.cost|percent_discount:treatment.discount|floatformat:"2"}}
+                                {% elif treatment.discount_type == "INR" and treatment.discount  %}
+                                    {{treatment.quantity|mul_float:treatment.cost|sub:treatment.discount|floatformat:"2"}}
+                                {% else %}
+                                    {{treatment.quantity|mul_float:treatment.cost}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2"></td>
+                            <td colspan="3">
+                                <table  width="100%">
+                                    <tr>
+                                        <td style="text-align: right; word-wrap: break-word;padding:3px;padding-bottom:0;">
+                                            Estimated Amount:
+                                        </td>
+                                        <td style=" text-align: right;word-wrap: break-word;padding:3px;padding-bottom:0;">{{data.summary_amount.total_amount|floatformat:"2"}} INR</td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid #cfcfcf">
+                                        <td style="text-align: right; word-wrap: break-word;padding:3px;padding-bottom:0;">
+                                            Total Discount:
+                                        </td>
+                                        <td style=" text-align: right;word-wrap: break-word;padding:3px;padding-bottom:0;"> {{data.summary_amount.discount|floatformat:"2"}} INR</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;word-wrap: break-word;padding:3px;padding-bottom:0;">Grand Total:</td>
+                                        <td style="text-align: right;word-break: break-word;word-wrap: break-word;padding:3px;padding-bottom:0;">{{data.summary_amount.grand_total|floatformat:"2"}} INR</td>
+                                    </tr>
+                                </table>
+                                <div class="clearboth" style="text-align: right">*Taxes as applicable</div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

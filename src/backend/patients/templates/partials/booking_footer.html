@@ -1,0 +1,25 @@
+<div class="footer" style="margin-top: {{page_settings.footer_margin_top}}">
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2" style="text-align: left">
+                {% if page_settings.footer_text %}
+                    {{page_settings.footer_text|linebreaks}}
+                {% endif %}
+                <br/>
+                <br/>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left">
+                {% if page_settings.footer_left_text %}
+                    {{page_settings.footer_left_text|linebreaks}}
+                {% endif %}
+            </td>
+            <td style="text-align: right">
+                {% if page_settings.footer_right_text %}
+                    {{page_settings.footer_right_text|linebreaks}}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>

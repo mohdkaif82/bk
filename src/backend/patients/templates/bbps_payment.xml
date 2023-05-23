@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bbps:BillPaymentResponse xmlns:bbps="http://bbps.org/schema">
+    <Reason approvalRefNum="{{approval_ref}}" responseCode="{{code}}" responseReason="{{message}}"/>
+</bbps:BillPaymentResponse>

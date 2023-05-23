@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+{% include "partials/header.html" %}
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div style="text-align: right">
+
+            <span class="header-text  green-text" style="min-width:160px">
+            </span>
+            <div class="entity-date date typename">
+                <span class="text">Date:</span>
+                <span class="name nowrap" >
+                    {{data.date|to_date|date:"d M, Y"}}
+                </span>
+            </div>
+            <br class=clearboth/>
+        </div>
+        <br>
+        <div>
+            Medical Leave Number : {{data.id}}
+        </div>
+
+        <br>
+        {% if data.excused_duty and data.excused_duty_from and data.excused_duty_to %}
+        <div>
+            This is to certify that the above named is unfit for duty for a period of <span class="underline">{{data.excuse_date_days}}</span>
+            ({{data.excuse_date_days|num_to_word}}) day(s) from <span class="underline">{{data.excused_duty_from|date:"d M, Y"}}</span>
+            to <span class="underline">{{data.excused_duty_to|date:"d M, Y"}}</span> inclusive.
+        </div>
+
+
+        <br/>
+        <div class="extralineheight">
+            <span class="labelname">Excused from:</span> <span
+                class="underline">{{data.excused_duty_from|date:"d M, Y"}}</span> to <span
+                class="underline">{{data.excused_duty_to|date:"d M, Y"}}</span>
+        </div>
+        <br>
+        {% endif %}
+        {% if data.fit_light_duty and data.fit_light_duty_from and data.fit_light_duty_to %}
+        <div class="extralineheight">
+            <span class="labelname">Fit for light duty from: </span> <span class="underline">{{data.fit_light_duty_from|date:"d M, Y"}}</span>
+            to <span
+                class="underline">{{data.fit_light_duty_to|date:"d M, Y"}}</span>
+        </div>
+        <br>
+        {% endif %}
+        {% if data.proof_attendance and data.proof_attendance_from and data.proof_attendance_to %}
+        <div>
+            The above named patient attended my clinic at <span
+                class="underline">{{data.proof_attendance_date|date:"d M, Y"}} {{data.proof_attendance_from|date:"H:i A"}}</span> and left at
+            <span class="underline">{{data.proof_attendance_date|date:"d M, Y"}} {{data.proof_attendance_to|date:"H:i A"}}</span>
+        </div>
+        <br>
+        {% endif %}
+        {% if data.notes %}
+        <div>
+            {{data.notes}}
+        </div>
+        <br>
+        {% endif %}
+        {% if not data.no_mention and data.valid_court %}
+        <div>
+            Valid for absence from court attendance.
+        </div>
+        <br/>
+        {% elif not data.no_mention and data.invalid_court %}
+        <div>
+            Invalid for absence from court attendance.
+        </div>
+        <br/>
+        {% endif %}
+        <br/>
+        <div>
+            Signature:
+        </div>
+        <br/>
+        {% if doctor.user and doctor.user.first_name %}
+        <div>
+            Doctor : Dr. {{doctor.user.first_name}}
+        </div>
+        {% endif %}
+        <br style="clear:both"/>
+    </div>
+</div>
+{% include "partials/footer.html" %}
+</body>
+</html>

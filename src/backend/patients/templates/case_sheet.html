@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Case File</title>
+</head>
+<body>
+{% include "partials/header.html" %}
+<div id="header_content" style="text-align: right">Generated on: {{time}}</div>
+<div id="footer_content" style="text-align: right">Page <pdf:pagenumber> of <pdf:pagecount> </div>
+{% for part in data %}
+    {% ifequal part.type "Clinical Notes" %}
+        {% include "partials/clinical_notes.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Files" %}
+        {% include "partials/files.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Invoices" %}
+        {% include "partials/invoice.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Payments" %}
+        {% include "partials/payment.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Prescriptions" %}
+        {% include "partials/prescriptions.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Procedures" %}
+        {% include "partials/treatment_plan.html" with data=part %}
+    {% endifequal %}
+    {% ifequal part.type "Vital Signs" %}
+        {% include "partials/vital_signs.html" with data=part %}
+    {% endifequal %}
+{% endfor %}
+{% include "partials/footer.html" %}
+</body>
+</html>

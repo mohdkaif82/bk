@@ -1,0 +1,464 @@
+{% load mathfilters %}
+{% load calculate_age %}
+<div class="datew-ise-container">
+    <div class="entity-contianer">
+        <table style="margin: 0px;" width="100%">
+            {% if data.is_cancelled %}
+            <tr>
+                <td width="100%" colspan="2">
+                    <p style="text-align:center;font-size: 5;font-weight: bold;color: red;">This payment is CANCELLED</p>
+                </td>
+            </tr>
+            {% endif %}
+            <tr width="100%">
+                <td width="50%">
+                    {% if doctor and doctor.user and doctor.user.first_name %}
+                        <span>By: Dr. {{doctor.user.first_name}}</span>
+                    {% endif %}
+                </td>
+                <td width="50%">
+                    {% if doctor and doctor.registration_number %}
+                        <span style="text-align: right">Registration No: {{doctor.registration_number}}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                            Payments
+                    </span>
+                </td>
+                <td width="50%">
+                    <span style="text-align: right">
+                        <div class="entity-date date typename" style="text-align: right">
+                            <span class="text">Date:</span>
+                            <span class="name nowrap">
+                                {{data.date|to_date|date:"d M, Y"}}
+                            </span>
+                        </div>
+                        <div class="entity-info" style="text-align: right">
+                            <span class="text">Receipt Number:</span>
+                            <span class="name"><b>{{data.payment_id}}</b></span>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">
+                    {% if data.is_advance %}
+                    Received with thanks, amount of {{data.total|add:data.advance_value|floatformat:2 }} INR towards the following :
+                    {% else %}
+                    Received with thanks, amount of {{data.total|floatformat:2}} INR towards the following :
+                    {% endif %}
+                </td>
+                <td width="50%">
+                </td>
+            </tr>
+        </table>
+        <div class="payment typename">
+            <div class="payment-info">
+                <div class="entity-contianer">
+                    {% if data.is_advance %}
+                    <table class='pr_table clearboth' style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-left " width="5%"> #</th>
+                                <th style="text-align:center;padding:5px;background-color:#CFCFCF;min-width: 25%;" class="text-left " width="40%"> Description</th>
+                                <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right cost-width totalcost"> Total Advance</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #cfcfcf">
+                                <td style="text-align:center;padding-top:5px;word-break: break-word;" >--</td>
+                                <td style="text-align:center;padding-top:5px;word-break: break-word;" >Advance Value</td>
+                                <td style="text-align:center;padding-top:5px;word-break: break-word;" >{{data.advance_value|floatformat:2}}</td>
+                            </tr>
+                        </tbody>
+                    </table><br>
+                    {% endif %}
+
+                    <div>
+                        <div class="entity-info" style="text-align: right">
+                            <span class="text">Date:</span>
+                            <span class="name"> {{data.date|to_date|date:"d M, Y"}}
+                                </span>
+                        </div>
+                    </div>
+
+                    {% for invoices in data.invoices %}
+                    <div class="typename">
+                        <div class="details">
+                            <div class="payment-info">
+                                {% if invoices.invoice.invoice_id %}
+                                <div class="entity-info" style="text-align: right">
+                                    <span class="text">Invoice Number:</span>
+                                    <span class="name">{{invoices.invoice.invoice_id}}</span>
+                                </div>
+                                {% endif %}
+                                <table class='pr_table clearboth' style="width:100%;">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-left " width="5%"> #</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;min-width: 25%;" class="text-left " width="40%"> Treatments & Products</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right cost-width cost" width="10%"> Unit Cost INR</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right" width="10%"> Qty</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right cost-width discount" width="10%"> Discount INR</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right cost-width tax" width="15%"> Tax INR</th>
+                                        <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-right cost-width totalcost" width="10%"> Total Cost INR</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if invoices.invoice.type == "Membership Amount."%}
+                                    <tr style="border-bottom: 1px solid #cfcfcf">
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >1.</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >Membership Amount</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >{{data.cost|floatformat:2}}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >1</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >0</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >--</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >{{data.total|floatformat:2}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if data.type == "Membership Benefit Value."%}
+                                    <tr style="border-bottom: 1px solid #cfcfcf">
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >1.</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >Membership Benefit Value</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >{{data.cost|floatformat:2}}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >1</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >0</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >--</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" >{{data.total|floatformat:2}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% for procedure in invoices.invoice.procedure %}
+                                    <tr class="topborder">
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;" >{{ forloop.counter }}.</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                            <span>{{procedure.name}}</span><br/>
+                                            {% if procedure.doctor and procedure.doctor_data.user.first_name %}
+                                            <span> <label class="width_10em">By: </label>{{procedure.doctor_data.user.first_name}}</span><br/>
+                                            {% endif %}
+                                            {% if procedure.date %}
+                                            <span> <label class="width_10em">Date: </label>{{procedure.date|date:"d M, Y"}}</span><br/>
+                                            {% endif %}
+                                            {% if procedure.default_notes %}
+                                            <span> <label
+                                                    class="width_10em">Note: </label>{{procedure.default_notes}}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{procedure.unit_cost|floatformat:2 }}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">{{procedure.unit}}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount"> {{procedure.discount_value|floatformat:2 }}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                            {{procedure.tax_value|floatformat:2 }}<br>
+                                            <font size="2">
+                                            {% for tax_data in procedure.taxes_data %}
+                                                {{tax_data.name}}@{{tax_data.tax_value}}={{procedure.unit_cost|mul:procedure.unit|sub:procedure.discount_value|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                            {% endfor %}
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{procedure.total|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for inventory in invoices.invoice.inventory %}
+                                    <tr class="topborder">
+                                        {% with invoices.invoice.procedure|length as procedure_length %}
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;" >{{ procedure_length|add:forloop.counter }}.
+                                        </td>
+                                        {% endwith %}
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                            <span>{{inventory.name}}</span><br/>
+                                            {% if inventory.doctor and inventory.doctor_data.user.first_name %}
+                                            <span> <label class="width_10em">By: </label>{{inventory.doctor_data.user.first_name}}</span><br/>
+                                            {% endif %}
+                                            {% if inventory.date %}
+                                            <span> <label class="width_10em">Date: </label>{{inventory.date|date:"d M, Y"}}</span><br/>
+                                            {% endif %}
+                                            {% if inventory.instruction %}
+                                            <span> <label
+                                                    class="width_10em">Note: </label>{{inventory.instruction}}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{inventory.unit_cost|floatformat:2 }}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">{{inventory.unit}}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount"> {{inventory.discount_value|floatformat:2 }}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                            {{inventory.tax_value|floatformat:2 }}<br>
+                                            <font size="2">
+                                            {% for tax_data in inventory.taxes_data %}
+                                                {{tax_data.name}}@{{tax_data.tax_value}}={{inventory.unit_cost|mul:inventory.unit|sub:inventory.discount_value|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                            {% endfor %}
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{inventory.total|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for prescription in invoices.invoice.prescription %}
+                                    <tr class="topborder">
+                                        {% with invoices.invoice.procedure|length as procedure_length %}
+                                        {% with invoices.invoice.inventory|length as inventory_length %}
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;" >{{ procedure_length|add:inventory_length|add:forloop.counter }}.</td>
+                                        {% endwith %}
+                                        {% endwith %}
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                            <span>{{prescription.name}}</span><br/>
+                                            {% if prescription.doctor and prescription.doctor_data.user.first_name %}
+                                            <span> <label class="width_10em">By: </label>{{prescription.doctor_data.user.first_name}}</span><br/>
+                                            {% endif %}
+                                            {% if prescription.date %}
+                                            <span> <label class="width_10em">Date: </label>{{prescription.date|date:"d M, Y"}}</span><br/>
+                                            {% endif %}
+                                            {% if prescription.doctor_notes %}
+                                            <span> <label
+                                                    class="width_10em">Note: </label>{{procedure.doctor_notes}}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{prescription.unit_cost|floatformat:2 }}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">{{prescription.unit}}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount"> {{prescription.discount_value|floatformat:2}}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                            {{prescription.tax_value|floatformat:2 }}<br>
+                                            <font size="2">
+                                            {% for tax_data in prescription.taxes_data %}
+                                                {{tax_data.name}}@{{tax_data.tax_value}}={{prescription.unit_cost|mul:prescription.unit|sub:prescription.discount_value|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                            {% endfor %}
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{prescription.total|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% if invoices.invoice.reservation_data and invoices.invoice.reservation_data.bed_package %}
+                                    <tr style="border-bottom: 1px solid #cfcfcf">
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">1.</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                            <span>{{invoices.invoice.reservation_data.bed_package.name}}</span>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{ invoices.invoice.reservation_data.bed_package_price|floatformat:2 }}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">1</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount">0.0</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                            {{ invoices.invoice.reservation_data.bed_package_tax|floatformat:2 }}<br>
+                                            <font size="2">
+                                            {% for tax_data in invoices.invoice.reservation_data.bed_package.taxes %}
+                                                {{tax_data.name}}@{{tax_data.tax_value}}={{invoices.invoice.reservation_data.bed_package_price|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                            {% endfor %}
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{invoices.invoice.reservation_data.bed_package_price|add:invoices.invoice.reservation_data.bed_package_tax|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if invoices.invoice.reservation_data %}
+                                    {% for medicine in invoices.invoice.reservation_data.medicines %}
+                                    <tr style="border-bottom: 1px solid #cfcfcf">
+                                        {% if invoices.invoice.reservation_data.bed_package %}
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">{{ forloop.counter|add:1 }}.</td>
+                                        {% else %}
+                                        <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">{{ forloop.counter }}.</td>
+                                        {% endif %}
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                            <span>{{medicine.name}}</span><br/>
+                                            {% if no_of_days and no_of_days > 1 %}
+                                                <span> <label class="width_10em">{{no_of_days}} days</span><br/>
+                                            {% elif no_of_days %}
+                                                <span> <label class="width_10em">{{no_of_days}} day</span><br/>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{medicine.price|floatformat:2 }}</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">1</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount">0.0</td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                            {{medicine.tax_value|floatformat:2 }}<br>
+                                            <font size="2">
+                                            {% for tax_data in medicine.taxes %}
+                                                {{tax_data.name}}@{{tax_data.tax_value}}={{medicine.price|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                            {% endfor %}
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{medicine.final_price|floatformat:2 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                    <tr>
+                                        <td colspan=4 style="font-size:.9em;">
+                                            {% if invoices.invoice.payments|pay_count:data.id > 0 %}
+                                            <br><br><br>
+                                            Previous Payment Details:
+                                            <table class="payment_summary">
+                                                <thead>
+                                                <tr>
+                                                    <th style="text-align:center;padding:5px;background-color:#CFCFCF;"
+                                                        class="text-left"> Date
+                                                    </th>
+                                                    <th style="text-align:center;padding:5px;background-color:#CFCFCF;">
+                                                        Receipt Number
+                                                    </th>
+                                                    <th style="text-align:center;padding:5px;background-color:#CFCFCF;">
+                                                        Mode Of Payment
+                                                    </th>
+                                                    <th style="text-align:center;padding:5px;background-color:#CFCFCF;">
+                                                        Amount Paid INR
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for payment in invoices.invoice.payments %}
+                                                    {% if payment.pay_id < data.id %}
+                                                    <tr style="border-bottom: 1px solid #cfcfcf">
+                                                        <td style="text-align:center;padding-top:5px;word-break: break-word;">
+                                                            {{payment.created_at|to_date|date:"d M, Y"}}
+                                                        </td>
+                                                        <td style="text-align:center;padding-top:5px;word-break: break-word;">
+                                                            {{payment.payment_id}}
+                                                        </td>
+                                                        <td style="text-align:center;padding-top:5px;word-break: break-word;">
+                                                            {% if payment.payment_mode %}
+                                                            {{payment.payment_mode}}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td style="text-align:center;padding-top:5px;word-break: break-word;">
+                                                            {{payment.pay_amount}}
+                                                        </td>
+                                                    </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% endif %}
+                                        </td>
+                                        <td colspan=3>
+                                            {% if data.type == "Membership Benefit Value."%}
+                                            <table class="total_summary">
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2 topborder"><br>Total Cost:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2 topborder"><br>
+                                                        0 INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Total Discount:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> 0 INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Total Tax:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> 0
+                                                        INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right padding2">
+                                                        <br>Grand Total:
+                                                    </td>
+                                                    <td style="text-align:right;border-top:1px solid #ddd"
+                                                        class="text-right bold padding2">
+                                                        0 INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Amount Received:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> {{data.total}}
+                                                        INR
+                                                    </td>
+                                                </tr>
+                                                <tr></tr>
+                                                <tr>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right padding2">
+                                                        <br>Balance Amount :
+                                                    </td>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right bold padding2">
+                                                        <br>
+                                                        0 INR
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            {% else %}
+                                            <table class="total_summary">
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2 topborder"><br>Total Cost:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2 topborder"><br>
+                                                        {{invoices.invoice.cost|floatformat:2 }} INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Total Discount:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> {{invoices.invoice.discount|floatformat:2}} INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Total Tax:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> {{invoices.invoice.taxes|floatformat:2 }}
+                                                        INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right padding2">
+                                                        <br>Grand Total:
+                                                    </td>
+                                                    <td style="text-align:right;border-top:1px solid #ddd"
+                                                        class="text-right bold padding2">
+                                                        {{invoices.invoice.total|floatformat:0 }} INR
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Amount Received:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> <b>{% if data.total %}{{ data.total|floatformat:0 }}{% else %}0{% endif %}
+                                                        INR</b>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:right;" class="text-right padding2">Other Amounts Received:</td>
+                                                    <td style="text-align:right;" class="text-right bold padding2"> {% if invoices.payments_till_data %}{{invoices.payments_till_data|floatformat:0 }}{% else %}0{% endif %}
+                                                        INR
+                                                    </td>
+                                                </tr>
+                                                <tr></tr>
+                                                <tr>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right padding2">
+                                                        <br>Balance Amount :
+                                                    </td>
+                                                    <td style="text-align:right;border-top:1px solid #ddd" class="text-right bold padding2">
+                                                        <br>
+                                                        {% if invoices.payments_till_data and data.total %}
+                                                        {{ invoices.invoice.total|sub:invoices.payments_till_data|sub:data.total|floatformat:0 }}
+                                                        {% elif invoices.payments_till_data %}
+                                                        {{ invoices.invoice.total|sub:invoices.payments_till_data|floatformat:0 }}
+                                                        {% elif data.total %}
+                                                        {{ invoices.invoice.total|sub:data.total|floatformat:0 }}
+                                                        {% else %}
+                                                        {{invoices.invoice.total|floatformat:0}}
+                                                        {% endif %} INR
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <br style="clear:both"/>
+                </div>
+                <br class="clearboth"/>
+                <div>
+                    <div>
+                        {% if data.bank or data.payment_mode_data or data.number and data.number != "0" %}<span>Mode of Payment </span>: {% endif %}
+                        <span class="semistrong">
+                            {% if data.payment_mode_data and data.payment_mode_data.mode %}{{data.payment_mode_data.mode}} {% endif %}
+                        </span>
+                        <span class="semistrong">
+                            {% if data.bank %}{{data.bank}} {% endif %} {% if data.number and data.number != "0" %}({{data.number}}) {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

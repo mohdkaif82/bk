@@ -1,0 +1,15 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Invoice</title>
+</head>
+<body>
+{% include "partials/booking_header.html" %}
+<div id="header_content" style="text-align: right">Generated on: {{time}}</div>
+<div id="footer_content" style="text-align: right">Page <pdf:pagenumber> of <pdf:pagecount> </div>
+{% include "partials/booking.html" %}
+{% include "partials/booking_footer.html" %}
+</body>
+</html>

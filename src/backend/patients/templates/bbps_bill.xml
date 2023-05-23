@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bbps:BillFetchResponse xmlns:bbps="http://bbps.org/schema">
+    <Reason approvalRefNum="{{approval_ref}}" responseCode="{{code}}" responseReason="{{message}}"/>
+    {% if code == 0 %}
+    <BillDetails>
+        <Tag name="Patient Id" value="{{patient.custom_id}}"/>
+        <Tag name="Clinic Name" value="{{practice_name}}"/>
+        <Tag name="customerName" value="{{patient.user.first_name}}"/>
+        <Tag name="Pending Amount" value="{{amount_due}}"/>
+        <Tag name="billNumber" value="{{invoices}}"/>
+    </BillDetails>
+    {% endif %}
+</bbps:BillFetchResponse>

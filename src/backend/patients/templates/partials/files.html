@@ -1,0 +1,25 @@
+{% load mathfilters %}
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div>
+            <span class="header-text  green-text" style="min-width:160px">
+                Files
+            </span>
+            <div class="entity-date date typename">
+                <span class="text">Date:</span>
+                <span class="name nowrap">
+                    {{data.created_at|to_date|date:"d M, Y"}}
+                </span>
+                <span class="name">{{data.created_at|date:"H:i A"}} </span>
+            </div>
+            <br class=clearboth/>
+        </div>
+        <div class="typename">
+            <div>
+                <img src="{{data.file_type.url}}"/>
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

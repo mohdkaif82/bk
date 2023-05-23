@@ -1,0 +1,95 @@
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <table style="width:100%">
+            <tr>
+                <td >
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                                                                        Prescription(R<sub>x</sub>)
+                                                                </span>
+                </td>
+                <td style="text-align: right">
+                    <span class="entity-date date typename" style="text-align: right">
+                        <span class="text">Date:</span>
+                        <span class="name nowrap"> {{data.date|to_date|date:"d M, Y"}} </span>
+                    </span>
+                </td>
+
+            </tr>
+        </table>
+        <style>
+            /*.typename table > tbody.prescription-details-table > tr:not(:last-child) > td {
+                border-bottom: 1px solid #BCBCBC;
+            }*/
+        </style>
+        <div class="typename">
+            <br style="clear:both"/>
+
+            <div>
+                <table width="100%" style="border-collapse:collapse;">
+                    <thead>
+                    <tr>
+                        <th style="padding:5px;background-color:#CFCFCF;"></th>
+                        <th style="text-align:left;padding:5px;background-color:#CFCFCF;">Drug Name</th>
+                        <th style="text-align:left;padding:5px;background-color:#CFCFCF;">Strength</th>
+                        <th style="text-align:left;padding:5px;background-color:#CFCFCF;">Instructions</th>
+                        <th style="text-align:left;padding:5px;background-color:#CFCFCF;">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for drug in data.drugs %}
+                    <tr style="border-bottom: 1px solid #cfcfcf">
+                        <td style="text-align:left;padding-top:5px" width="5%">{{forloop.counter}}</td>
+                        <td style="text-align:left;padding-top:5px;" width="30%">
+                            {% if drug.inventory and drug.inventory.drug_type_data.name %}
+                            {{drug.inventory.drug_type_data.name}}
+                            {% endif %}
+                            <strong>{{drug.name}}</strong>
+                        </td>
+                        <td style="text-align:left;padding-top:5px">
+                            {% if drug.inventory and drug.inventory.strength %}
+                            {{drug.inventory.strength}}
+                            {{drug.inventory.strength_type_data.name}}
+                            {% else %}
+                            --
+                            {% endif %}
+                        </td>
+                        <td style="text-align:left;padding-top:5px;word-break: break-word">
+                            {% if drug.duration %}
+                            {{drug.duration}} {{drug.duration_type}}
+                            {% endif %}
+                            <br/>
+                            {% if drug.before_food %}
+                            Before Food
+                            {% endif %}
+                            {% if drug.after_food %}
+                            After Food
+                            {% endif %}
+                            <br/>
+                            {% if drug.instruction %}
+                            <pre>{{drug.instruction}}</pre>
+                            {% endif %}
+                        </td>
+                        <td style="text-align:left;padding-top:5px;word-break: break-word">
+                            {% if drug.inventory.package_details %}
+                            {{drug.inventory.package_details}}
+                            {% else %}
+                            --
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <br/>
+                <p>
+                <pre> {% if data.doctor_notes %}<strong>General Instructions : </strong> {{data.doctor_notes}} {% endif %}</pre>
+                </p>
+                <br/>
+            </div>
+
+
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

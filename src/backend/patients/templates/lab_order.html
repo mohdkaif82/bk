@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Lab Order</title>
+</head>
+<body>
+{% include "partials/header.html" %}
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div>
+            <table style="width:100%">
+            <tr>
+                <td >
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                                                                        Lab Orders
+                                                                </span>
+                </td>
+                <td style="text-align: right">
+                    <span class="entity-date date typename" style="text-align: right">
+                        <span class="text">Date:</span>
+                        <span class="name nowrap"> {{data.date|to_date|date:"d M, Y"}} </span>
+                    </span>
+                </td>
+
+            </tr>
+        </table>
+        </div>
+        <div class="typename">
+            <div class="treatment-info">
+                <table width="100%" >
+                    <thead>
+                    <tr >
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"></th>
+                        <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Test Name</th>
+                        <th style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Instructions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for lab in data.labs %}
+                    <tr style="text-align:left;">
+                        <td style="word-break: break-word; word-wrap: break-word;padding:3px;padding-bottom:0;">
+                            {{forloop.counter}}
+                        </td>
+                        <td width="50%" style="word-break: break-word; word-wrap: break-word;padding:3px;padding-bottom:0;">
+                            {{lab.name}}
+                        </td>
+                        <td style="word-break: break-word;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                            {{lab.instruction}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <br>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>
+{% include "partials/footer.html" %}
+</body>
+</html>

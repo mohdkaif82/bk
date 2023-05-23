@@ -1,0 +1,132 @@
+{% load mathfilters %}
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <table style="margin: 0px;" width="100%">
+            {% if data.payment_status and data.payment_status == "CANCELLED" %}
+            <tr>
+                <td width="100%" colspan="2">
+                    <p style="text-align:center;font-size: 5;font-weight: bold;color: red;">This Booking is CANCELLED</p>
+                </td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td width="50%">
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                            Booking
+                    </span>
+                </td>
+                <td width="50%">
+                    <span style="text-align: right">
+                        <div class="entity-date date typename" style="text-align: right">
+                            <span class="text">Date:</span>
+                            <span class="name nowrap">
+                                                {{data.date|to_date|date:"d M, Y"}}
+                                            </span>
+                        </div>
+                        <div class="entity-info" style="text-align: right">
+                            <span class="text">Booking Number:</span>
+                            <span class="name"><b>{{data.id}}</b></span>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <div class="typename">
+            <div class="details">
+                <div class="payment-info">
+                    <table class='pr_table clearboth'>
+                        <thead>
+                        <tr>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;" class="text-left " width="6%"> #</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;min-width: 25%;" width="40%"> Treatments & Products</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;"> Unit Cost INR</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;" width="7%"> Qty</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;"> Discount INR</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;"> Tax INR</th>
+                            <th style="text-align:center;padding:5px;background-color:#CFCFCF;"> Total Cost INR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if data and data.bed_package %}
+                        <tr style="border-bottom: 1px solid #cfcfcf">
+                            <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">1.</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                <span>{{data.bed_package.name}}</span>
+                            </td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{ data.bed_package_price|floatformat:2 }}</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">1</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount">0.0</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                {{ data.bed_package_tax|floatformat:2 }}<br>
+                                <font size="2">
+                                {% for tax_data in data.bed_package.taxes %}
+                                    {{tax_data.name}}@{{tax_data.tax_value}}={{data.bed_package_price|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                {% endfor %}
+                                </font>
+                            </td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{data.bed_package_price|add:data.bed_package_tax|floatformat:2 }}</td>
+                        </tr>
+                        {% endif %}
+                        {% for medicine in data.medicines %}
+                        <tr style="border-bottom: 1px solid #cfcfcf">
+                            {% if data.bed_package %}
+                            <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">{{ forloop.counter|add:1 }}.</td>
+                            {% else %}
+                            <td class=" text-left" style="text-align:center;padding-top:5px;word-break: break-word;">{{ forloop.counter }}.</td>
+                            {% endif %}
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class=" text-left ">
+                                <span>{{medicine.medicine.name}}</span><br/>
+                                {% if no_of_days and no_of_days > 1 %}
+                                    <span> <label class="width_10em">{{no_of_days}} days</span><br/>
+                                {% elif no_of_days %}
+                                    <span> <label class="width_10em">{{no_of_days}} day</span><br/>
+                                {% endif %}
+                            </td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right cost">{{medicine.unit_cost|floatformat:2 }}</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right">{{ medicine.quantity }}</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right discount">{{ medicine.discount_value|floatformat:2 }}</td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right tax">
+                                {{medicine.tax_value|floatformat:2 }}<br>
+                                <font size="2">
+                                {% for tax_data in medicine.taxes %}
+                                    {{tax_data.name}}@{{tax_data.tax_value}}={{medicine.unit_cost|mul:tax_data.tax_value|div:100|floatformat:2 }}
+                                {% endfor %}
+                                </font>
+                            </td>
+                            <td style="text-align:center;padding-top:5px;word-break: break-word;" class="text-right totalcost"> {{medicine.total_price|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan=4 style="font-size:.9em;">
+                            </td>
+                            <td></td>
+                            <td colspan=2>
+                                <table class="total_summary">
+                                    <tr>
+                                        <td style="text-align:right;" class="text-right padding2 topborder"><br>Total Cost:</td>
+                                        <td style="text-align:right;" class="text-right bold padding2 topborder"><br>{{data.total_price|sub:data.total_tax|floatformat:2 }} INR</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:right;" class="text-right padding2">Total Tax:</td>
+                                        <td style="text-align:right;" class="text-right bold padding2"> {{data.total_tax|floatformat:2 }} INR</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:1px solid #ddd;text-align:right;" class="text-right padding2"><br>Grand
+                                            Total:
+                                        </td>
+                                        <td style="border-top:1px solid #ddd;text-align:right;" class="text-right bold padding2"><br>
+                                            {{data.total_price|floatformat:0 }} INR
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

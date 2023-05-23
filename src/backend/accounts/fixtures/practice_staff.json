@@ -1,0 +1,57 @@
+[
+  {
+    "model": "accounts.Role",
+    "pk": 1,
+    "fields": {
+      "name": "ADMIN",
+      "description": "Admin Role",
+      "created_at": "2020-04-04T00:00:00.000Z",
+      "modified_at": "2020-04-04T00:00:00.000Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounts.Role",
+    "pk": 2,
+    "fields": {
+      "name": "STAFF",
+      "description": "Staff Role",
+      "created_at": "2020-04-04T00:00:00.000Z",
+      "modified_at": "2020-04-04T00:00:00.000Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "accounts.Role",
+    "pk": 3,
+    "fields": {
+      "name": "DOCTOR",
+      "description": "Doctor Role",
+      "created_at": "2020-04-04T00:00:00.000Z",
+      "modified_at": "2020-04-04T00:00:00.000Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "practice.PracticeStaff",
+    "pk": 1,
+    "fields": {
+      "user": "1",
+      "role": "3",
+      "is_active": true,
+      "created_at": "2020-04-04T00:00:00.000Z",
+      "modified_at": "2020-04-04T00:00:00.000Z"
+    }
+  },
+  {
+    "model": "practice.Practice",
+    "pk": 1,
+    "fields": {
+      "default_doctor": "1",
+      "name": "BK Arogyam & Research Pvt. Ltd.",
+      "is_active": true,
+      "created_at": "2020-04-04T00:00:00.000Z",
+      "modified_at": "2020-04-04T00:00:00.000Z"
+    }
+  }
+]

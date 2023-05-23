@@ -1,0 +1,115 @@
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div>
+ <table style="width:100%">
+            <tr>
+                <td >
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                                                                       Report Manual
+                                                                </span>
+                </td>
+                <td style="text-align: right">
+                    <span class="entity-date date typename" style="text-align: right">
+                        <span class="text">Date:</span>
+                         <span class="name nowrap">
+                                    {{data.date|to_date|date:"d M, Y"}}
+                                </span>
+                <span class="name">{{data.date|to_date|date:"H:i A"}} </span>
+                    </span>
+                </td>
+
+            </tr>
+        </table>
+        </div>
+        <div class="typename">
+            <div class="treatment-info">
+
+                <table style="border-collapse:collapse;margin-top:10px" width="100%">
+                    <thead>
+
+                    <tr>
+                        <th width="20%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> TEMP <span style="font-weight: 200;">(in °C)</span></th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> PULSE <span style="text-transform: lowercase;">(bpm)</span></th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> RR<span style="text-transform: lowercase;">(breaths/min)</span></th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> SYS/DIA <span style="text-transform: lowercase;">(mmHg)</span></th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> WEIGHT <span style="text-transform: lowercase;">(Kg)</span></th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Creatinine Level</th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Haemoglobin Level</th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Urea Level</th>
+                        <th width="10%" style="padding:3px;padding-bottom:0;background-color:#CFCFCF;"> Uric Acid Level</th>
+                    </tr>
+                    </thead>
+                    <tbody style="font-weight: bold">
+<tr>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.temperature %}
+                            {{data.temperature}} ({{data.temperature_part}})
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.pulse %}
+                            {{data.pulse}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.resp_rate %}
+                            {{data.resp_rate}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.blood_pressure_up or data.blood_pressure_down %}
+                            {{data.blood_pressure_up}}/{{data.blood_pressure_down}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.weight %}
+                            {{data.weight}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.creatinine %}
+                            {{data.creatinine}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.haemoglobin %}
+                            {{data.haemoglobin}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.urea %}
+                            {{data.urea}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td style="word-break: break-word; width:25%;word-wrap: break-word;padding:3px;padding-bottom:0;">
+                        {% if data.uric_acid %}
+                            {{data.uric_acid}}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+</tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>

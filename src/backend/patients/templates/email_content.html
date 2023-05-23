@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BK Arogyam & Research Pvt. Ltd.</title>
+</head>
+<body>
+<div marginwidth="0" marginheight="0">
+    <div style="text-align: center;">
+        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+            <tbody>
+            <tr>
+                <td align="center" valign="top">
+                    <table style="border:1px solid #cfcfcf;padding:10px" border="0" cellpadding="0" cellspacing="0"
+                           width="600">
+                        <tbody>
+                        <tr>
+                            <td align="center" valign="top">
+
+                                <table border="0" cellpadding="0" cellspacing="0" width="680">
+                                    <tbody>
+                                    <tr>
+                                        <td class="m_1622312136548994093headerContent">
+                                            <div style="min-height:100px;border-bottom:3px solid #cfcfcf">
+                                                <table width="100%">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td width="150" style="padding:5px">
+                                                            <img width="150"
+                                                                 src="{{base_url}}{{communications.clinic_logo|urlencode}}"
+                                                                 tabindex="0">
+                                                        </td>
+                                                        <td style="padding:5px">
+                                                            <h2>{{communications.email_clinic_name}}</h2>
+                                                            <table width="100%">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td width="50%">
+                                                                        {% if practice.address %}
+                                                                        {{practice.address}}
+                                                                        <br>
+                                                                        {% endif %}
+                                                                        {% if practice.locality %}
+                                                                        {{practice.locality}}
+                                                                        <br>
+                                                                        {% endif %}
+                                                                        {% if practice.city %}
+                                                                        {{practice.city}}
+                                                                        <br>
+                                                                        {% endif %}
+                                                                        {% if practice.state %}
+                                                                        {{practice.state}}
+                                                                        {% endif %},
+                                                                        {% if practice.country %}
+                                                                        {{practice.country}}
+                                                                        {% endif %}
+                                                                    </td>
+
+                                                                    <td width="50%">
+                                                                        {% if practice.website %}
+                                                                        Website : <a href="{{practice.website}}"
+                                                                                     target="_blank">{{practice.website}}</a><br>
+                                                                        {% endif %}
+                                                                        {% if communications.contact_number %}
+                                                                        Contact : {{communications.contact_number}}<br>
+                                                                        {% endif %}
+                                                                        {% if communications.email %}
+                                                                        Email : {{communications.email}}
+                                                                        {% endif %}
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" valign="top">
+
+                                <table border="0" cellpadding="0" cellspacing="0" width="600">
+                                    <tbody>
+                                    <tr>
+                                        <td valign="top" class="m_1622312136548994093bodyContent"
+                                            style="min-height:100px">
+
+                                            <div style="min-height:100px">
+                                                <div><br>
+                                                    Dear {{name}},
+                                                </div>
+                                                <div>
+
+                                                    Please find the attached {{report_name}} from
+                                                    {{communications.email_clinic_name}}
+                                                </div>
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <br>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

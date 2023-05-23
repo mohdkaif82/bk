@@ -1,0 +1,887 @@
+{% load calculate_age %}
+<style>
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, font, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td {
+        vertical-align: middle;
+        font-size: 1em;
+    }
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: middle;
+    font-size: 1em;
+}
+    .cost-width {
+        width: 100px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    span, strong, label, .verticalbaseline {
+        vertical-align: baseline;
+    }
+
+    .verticalbaseline a, .verticalbaseline img {
+        vertical-align: baseline;
+    }
+
+    html {
+        border: 0;
+        color: #6F6F6F;
+    }
+
+    body {
+        border: 0;
+        /*height: 100%;*/
+        color: #6F6F6F;
+    }
+
+    .header-text {
+        font-size: 20px;
+        float: left;
+        position: relative;
+        top: 0.4em;
+        z-index: 100;
+    }
+
+    .header-text-smaller {
+        font-size: 1.2em;
+        padding-bottom: 0.5em;
+    }
+
+    .thead th {
+        text-align: left;
+    }
+
+    th:first-child {
+        padding-left: .5em;
+    }
+
+    th:last-child {
+        padding-right: .5em;
+    }
+
+    ul {
+        list-style: disc;
+        margin-left: 10%;
+    }
+
+    ul li {
+        list-style: disc;
+    }
+
+    body {
+        font-family: Verdana, Arial, Tahoma, sans-serif;
+        color: #555;
+        font-weight: normal;
+    }
+
+    .semistrong {
+        font-weight: bold;
+    }
+
+    h3 {
+        margin: .2em;
+        line-height: 1.2em;
+    }
+
+    .half {
+        width: 50%;
+        float: left;
+    }
+
+    .centeralign {
+        text-align: center;
+    }
+
+    .rightalign {
+        text-align: right;
+    }
+
+    h3 {
+        margin-top: 1em;
+    }
+
+    .clearboth {
+        clear: both;
+    }
+
+    .header {
+        font-family: Verdana, Arial, Tahoma, sans-serif;
+        color: #555;
+        border-bottom: 1px solid #CCC;
+        padding-bottom: 1em;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .header .practice-info h6 {
+        font-size: 1.6em;
+    }
+
+    .patient_header {
+
+        padding: 0.5em 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .patient_header td * {
+        line-height: 1.5em;
+    }
+
+    .header .practice-info * {
+        line-height: 1.5em;
+    }
+
+    .header .practice-info .name {
+        font-weight: bold;
+    }
+
+    .header .clear-both {
+        clear: both;
+    }
+
+    .header .practice-info > span,
+    .header .practice-info div > span {
+        display: block;
+    }
+
+    .header .practice-info .contact-info {
+        font-weight: bold;
+        float: right;
+    }
+
+    .header .practice-info .address {
+        float: left;
+    }
+
+    .header .practice-info .contact-info .label {
+        font-weight: normal;
+    }
+
+    h3.dateheading {
+        color: #678214;
+        border-bottom: 1px solid #4a4a4a;
+        font-weight: 300;
+        padding-bottom: .2em;
+        margin-bottom: .2em;
+    }
+
+    .borderbottom {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .treatment {
+        width: 30%;
+    }
+
+    .labelname {
+        width: 20%;
+        display: inline-block;
+    }
+
+    .extralineheight * {
+        line-height: 1.5;
+    }
+
+    .padding5 {
+        padding: 5px;
+    }
+
+    .padding2 {
+        padding: 0px 2px;
+    }
+
+    .text-valign {
+        vertical-align: top;
+    }
+
+    .text-valign-initial {
+        vertical-align: initial;
+    }
+
+    .separator {
+        border-bottom: 1px solid #bbb;
+    }
+
+    .typename .details {
+        line-height: 1.6;
+        position: relative;
+        text-align: left;
+        color: #222;
+        background-color: #fff;
+    }
+
+    .typename table thead tr {
+        background-color: #DEDEDE;
+    }
+
+    .typename table thead th {
+        padding: .25em;
+
+    }
+
+    .typename table tbody td {
+        padding: 0.5em;
+        padding-bottom: 0em;
+
+    }
+
+    .typename table tbody .nopadding td {
+        padding-top: 0em;
+    }
+
+    .typename table tbody td.bottomborder {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .inlineblock {
+        display: inline-block;
+    }
+
+    .typename .table {
+        /* width:100%; */
+        margin: 0 auto;
+    }
+
+    .patient_header {
+        padding: 0em 0 1em 0;
+    }
+
+    .patient_header .patient-text {
+
+        font-weight: 500;
+    }
+
+    .patient_header .name {
+        font-weight: 500;
+        line-height: 1.4em;
+        color: #000;
+    }
+
+    .registrationNumber {
+        width: 50%;
+        text-align: right;
+        word-wrap: break-word;
+    }
+
+    .doctor_name_block {
+        display: inline-block;
+        /* width:100%; */
+    }
+
+    .patient_header .text {
+
+        display: inline-block;
+
+    }
+
+    .typename .name {
+        font-weight: bold;
+        display: inline-block;
+        padding: 10px 0 0 0;
+    }
+
+    .typename .text {
+        display: inline-block;
+        padding: 10px 0 0 5px;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .padding5 {
+        padding: 5px;
+    }
+
+    .padding2 {
+        padding: 2px;
+    }
+
+    .text-valign {
+        vertical-align: top;
+    }
+
+    .separator {
+        border-bottom: 1px solid #bbb;
+    }
+
+    .pr_table {
+        border-collapse: collapse;
+        cursor: default;
+        clear: both;
+    }
+
+    .typename .total_summary {
+        float: right;
+        right: 0;
+    }
+
+    .typename .bold {
+        font-size: 1.1em;
+
+    }
+
+    .entity-date {
+        margin-bottom: 0.5em;
+    }
+
+    .entity-contianer .date {
+        float: right;
+        /*font-size: 1em;*/
+    }
+
+    .green-text {
+        color: #608720;
+    }
+
+    .entity-info {
+        font-size: 1em;
+        white-space: nowrap;
+        float: right;
+        clear: both;
+        margin-bottom: .5em;
+        margin-top: -.6em;
+    }
+
+    .entity-info .text, .entity-info .name {
+        padding: 0 !important;
+    }
+
+    .total_summary .text-right {
+        white-space: nowrap;
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+
+    .width_10em {
+        width: 4em;
+        display: inline-block;
+    }
+
+    .topborder {
+        border-top: 1px solid #eee;
+    }
+
+    .img-cont.square {
+        max-width: 15%;
+        max-height: 150px;
+    }
+
+    .img-cont.square.centre img {
+        max-width: 15%;
+    }
+
+    .img-cont.narrow {
+        max-height: 150px;
+        max-width: 10%;
+    }
+
+    .img-cont.narrow.centre img {
+        max-width: 10%;
+    }
+
+    .img-cont.wide {
+        max-height: 70px;
+        text-align: center;
+        float: none;
+        /* width:100%; */
+    }
+
+    .img-cont.square img {
+        max-width: 100%;
+        max-height: 150px;
+    }
+
+    .img-cont.wide img {
+        max-height: 70px;
+        text-align: center;
+        float: none;
+        max-width: 100%
+    }
+
+    .img-cont.narrow img {
+        max-height: 150px;
+        max-width: 100%;
+    }
+
+    .img-cont.left {
+        float: left;
+    }
+
+    .img-cont.right {
+        float: right;
+    }
+
+    .img-cont.centre {
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .practice-info.square {
+        float: left;
+        width: 80%;
+        margin-left: 5%;
+    }
+
+    .practice-info.wide {
+        float: left;
+        /* width:100%; */
+        margin-left: 0;
+    }
+
+    .practice-info.narrow {
+        float: left;
+        width: 85%;
+        margin-left: 5%
+    }
+
+    .visiblelogo {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    thead, tr {
+        page-break-inside: avoid;
+    }
+
+    .cost ul, .cost li, .cost ol {
+        list-style: none !important;
+    }
+
+    .floatright {
+        float: right;
+    }
+
+    .floatleft {
+        float: left;
+    }
+
+    .topbottompadding_1em {
+        padding: 1em 0px;
+    }
+
+    .underline {
+        text-decoration: underline;
+    }
+
+    .soap_table td {
+        vertical-align: top;
+        padding: 0.7em 0 !important;
+    }
+
+    .soap_table li {
+        list-style: none;
+    }
+
+    pre {
+        max-width: 95%;
+        font-family: Verdana, Arial;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+
+    }
+
+    .topborder_black {
+        border-top: 1px solid #fff !important;
+    }
+
+    .test_align_right {
+        text-align: right;
+    }
+
+    .fraction {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+        letter-spacing: 0.001em;
+        text-align: center;
+        font-size: 9px;
+        margin-left: 7px;
+    }
+
+    .fraction > span {
+        display: block;
+        padding: 0.1em;
+        margin: -9px
+    }
+
+    .bar {
+        font-size: 1.8em;
+    }
+
+    .lensobservation_table {
+        margin-left: 7%;
+        margin-bottom: 2%;
+        border-collapse: collapse;
+    }
+
+    .lensobservation_table td {
+        padding: 8px !important;
+        text-align: center;
+    }
+
+    .lensobservation_table th {
+        font-family: 'OpenSans', 'Arial', "Lucida Sans", Verdana, Tahoma, sans-serif;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .leftalign {
+        text-align: left;
+    }
+
+    .lensobservation_table th:first-child {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+
+    .semibold {
+        font-family: 'OpenSans', 'Arial', "Lucida Sans", Verdana, Tahoma, sans-serif;
+        font-weight: 600;
+    }
+
+    .lensobservation_table .borderbottom {
+        padding-bottom: 2px;
+        padding-top: 3px;
+        border-bottom: 1px solid #DBDBDB;
+    }
+
+    .eyeexamination_table {
+        margin-left: 7%;
+        word-break: break-all;
+    }
+
+    .eyeexamination_table td, th, th:first-child {
+        text-align: left;
+        padding: 8px 0 3px 0;
+    }
+
+    .amount_due_table th:first-child {
+        text-align: right;
+    }
+
+    .soap_observation_master_div {
+        margin-right: 10%;
+        background-color: white;
+    }
+
+    .dark_background {
+        padding: 3px 3px 3px 5px;
+        background-color: #F6F6F6;
+        margin-left: 7%;
+    }
+
+    .center_align {
+        text-align: center;
+    }
+
+    .break_word {
+        word-break: break-word;
+    }
+
+    .lensobservation_border {
+        border: 1px solid #d8d8d8;
+    }
+
+    .consentform_container {
+        padding: 10px 0 0 0;
+    }
+
+    .consentform_container table {
+        /* width:100%; */
+        padding-bottom: 10px;
+    }
+
+    .consentform_container caption {
+        text-align: left;
+        font-size: 0.9em;
+        padding-bottom: 2px;
+    }
+
+    .consentform_container td {
+        width: 50%;
+    }
+
+    .consentform_container .info {
+        line-height: 1.6;
+        position: relative;
+        text-align: left;
+        color: #000000
+    }
+
+    .consentform_container ul {
+        list-style: disc;
+        margin-left: 5%;
+    }
+
+    .consentform_container .subinfo {
+        text-align: left;
+        font-weight: 0.9em;
+    }
+
+    .consentform_container p {
+        margin: 1em 0;
+    }
+
+    .dentalchart-image {
+        line-height: 1.6;
+        text-align: left;
+        color: #222;
+        background-color: #fff;
+    }
+
+    .dc-details-for-print {
+        margin: 25px;
+        clear: both;
+    }
+
+    .print-teeth-head-box {
+        /* overiding bootstrap css */
+        background-color: #fff !important;
+        position: relative;
+        top: 6px;
+        width: 7%;
+        left: 48.5%;
+        line-height: 1;
+        clear: both;
+    }
+
+    .tooth-wise-detail {
+        border-bottom: 1px solid #000;
+        text-align: center;
+    }
+
+    .tooth-info-block {
+        width: 6%;
+        float: left;
+        padding: 2px;
+        margin-bottom: 5px;
+    }
+
+    .tooth-info {
+        width: 92%;
+        float: left;
+        padding: 2px;
+    }
+
+    .clearfix:before, .clearfix:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+
+    .clearfix:after {
+        clear: both;
+    }
+
+    .dc-heading {
+        text-align: center;
+        background-color: #CFCFCF;
+    }
+
+    .image-class {
+        margin-left: 50px;
+    }
+
+    html, body {
+        font-size: 9.30375pt;
+    }
+
+    .amount_due_practice_info {
+        font-size: 1.6em;
+        margin-top: .9em;
+    }
+
+    .gray-background {
+        margin-top: .95em;
+        padding: .95em;
+        background-color: #CFCFCF;
+    }
+
+    @page {
+    {% if page_settings.page_size and page_settings.page_orientation %}
+    size: {{ page_settings.page_size|lower }} {{ page_settings.page_orientation|lower }};
+    {% endif %}
+    {% if page_settings.page_margin_top %}
+    margin-top : {{ page_settings.page_margin_top|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_left %}
+    margin-left : {{ page_settings.page_margin_left|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_right %}
+    margin-right : {{ page_settings.page_margin_right|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_bottom %}
+    margin-bottom : {{ page_settings.page_margin_bottom|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    }
+
+    {% if page_settings.preview %}
+    html{
+    {% if page_settings.page_size and page_settings.page_orientation %}
+        {% if page_settings.page_size|lower == 'a3' %}
+        zoom:0.559732;
+        width:11.69in;
+        {% elif page_settings.page_size|lower == 'a4' %}
+        zoom:0.788413;
+        width:8.27in;
+        {% elif page_settings.page_size|lower == 'a5' %}
+        zoom:1.11786;
+        width:5.83in;
+        {% endif %}
+    {% endif %}
+    {% if page_settings.page_margin_top %}
+    margin-top : {{ page_settings.page_margin_top|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_left %}
+    margin-left : {{ page_settings.page_margin_left|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_right %}
+    margin-right : {{ page_settings.page_margin_right|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+    {% if page_settings.page_margin_bottom %}
+    margin-bottom : {{ page_settings.page_margin_bottom|mul_float:96|floatformat:"0" }}px;
+    {% endif %}
+
+    }
+    {% endif %}
+    {% if page_settings.printerType == 'BLACK' %}
+    html{
+         -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+    {% endif %}
+</style>
+<div style="">
+    <table class="header" style="width:100%">
+        <tr style="border-bottom: none">
+            <td  rowspan="2" colspan="2" style="min-width:100%">
+                {% if page_settings.logo_include %}
+                    <div style="vertical-align:top;">
+                    {% if logo %}
+                        <img src="data:image/png;base64, {{logo}}" style="align:{{page_settings.logo_alignment|lower}}; max-width: 100px; max-height: 100px;"/>
+                    {% endif %}
+                    </div>
+                {% endif %}
+            </td>
+            <td colspan="10">
+                <h6 style="clear:both;font-weight:bold;">
+                    {% if page_settings.header_text %}
+                    {{page_settings.header_text}}
+                    {% endif %}
+                </h6>
+            </td>
+        </tr>
+        <tr style="border-bottom: 1px solid #CCCCCC">
+            <td colspan="5" style="width: 40%;text-align: left">
+                    {% if page_settings.header_left_text %}
+                    {{page_settings.header_left_text|linebreaks}}
+                    {% endif %}
+            </td>
+            <td colspan="5" style="width: 40%;text-align: left">
+                  <span class="street">
+                    {% if page_settings.header_right_text %}
+                    {{page_settings.header_right_text|linebreaks}}
+                    {% endif %}
+                </span>
+            </td>
+        </tr>
+    </table>
+    <br>
+    {% if page_settings.patient_details %}
+    <table style="width:100%">
+        <tr style="padding-top: 4px">
+            <td colspan="6" style="vertical-align:top;padding-top: 8px">
+                <div>
+                    <span class="name">
+                         {{patient.user.first_name}},
+                        {% if not page_settings.exclude_patient_id and patient.id %}
+                        (ID: {{patient.custom_id}})
+                        {% endif %}
+                    </span>
+                </div>
+                <div>
+                    {% if not page_settings.exclude_phone and patient.user and patient.user.mobile %}
+                    {{patient.user.mobile}}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if not page_settings.exclude_email and patient.user and patient.user.email %}
+                    {{patient.user.email}}
+                    {% endif %}
+                </div>
+            </td>
+            <td colspan="6" style="vertical-align:top;padding-top: 8px">
+                {% if not page_settings.exclude_gender_dob %}
+                    {% if patient.gender %}
+                        {{patient.gender}},
+                    {% endif %}
+                    {% if patient.dob and patient.dob|age > 0 %}
+                        {{patient.dob|age}} Years
+                    {% endif %}
+                {% endif %}
+                <br/>
+                    {% if patient.blood_group and not page_settings.exclude_blood_group %}
+                        Blood Group: {{patient.blood_group}}
+                    {% endif %}
+                    <p>{% if patient.address and not page_settings.exclude_address%}
+                        {{patient.address}}<br>
+                        {% endif %}
+                        {% if patient.locality %}
+                        {{patient.locality}}<br>
+                        {% endif %}
+                        {% if patient.city %}{{patient.city}}{% endif %} - {% if patient.pincode %}{{patient.pincode}}{%endif %}</p>
+            </td>
+
+        </tr>
+    </table>
+    <div>
+        {% if not page_settings.exclude_history %}
+        <span class="text name floatleft">Medical History: </span>
+        <span class="">
+            {% if patient.medical_history_data|length == 0 %}
+                --
+            {% endif %}
+            {% for medical_history in patient.medical_history_data %}
+                {% if not forloop.last %}
+                    {{medical_history.name}},
+                {% else %}
+                    {{medical_history.name}}
+                {% endif %}
+            {% endfor %}
+        </span>
+        {% endif %}
+    </div>
+    {% endif %}
+    <hr/>
+</div>

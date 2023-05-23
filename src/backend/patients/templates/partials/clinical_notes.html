@@ -1,0 +1,122 @@
+{% load calculate_age %}
+<div class="datewise-container">
+    <div class="entity-contianer">
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <td>
+                        {% if data.doctor %}
+                        <br/><b>By: </b> Dr. {{data.doctor.user.first_name}}
+                        {% endif %}
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    <span class="header-text  green-text" style="min-width:160px;font-size: 20px">
+                                                                        Clinical Notes (R<sub>x</sub>)
+                                                                </span>
+
+                    </td>
+                    <td style="text-align: right">
+                    <span class="entity-date date typename" style="text-align: right">
+                        <span class="text">Date:</span>
+                        <span class="name nowrap"> {{data.date|to_date|date:"d M, Y"}} </span>
+                    </span>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+        <div class="typename">
+            <div class="treatment-info">
+                <table width="100%" style="margin-top: 15px">
+                    <tbody>
+                    <tr style="border-top: 1px solid #8c8c8c;border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Complaints
+                        </td>
+                        <td>
+                            {% load calculate_age %}
+                            {% for complaint in data.chief_complaints|split:"$_$" %}
+                            {% if complaint %}
+                            <li>{{complaint}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Observation
+                        </td>
+                        <td>
+                            {% for observation in data.observations|split:"$_$" %}
+                            {% if observation %}
+                            <li>{{observation}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Investigation
+                        </td>
+                        <td>
+                            {% for investigation in data.investigations|split:"$_$" %}
+                            {% if investigation %}
+                            <li>{{investigation}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Diagnoses
+                        </td>
+                        <td>
+                            {% for diagnose in data.diagnosis|split:"$_$" %}
+                            {% if diagnose %}
+                            <li>{{diagnose}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Notes
+                        </td>
+                        <td>
+                            {% for note in data.notes|split:"$_$" %}
+                            {% if note %}
+                            <li>{{note}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #8c8c8c;">
+                        <td style="font-weight: bold;padding:3px;padding-bottom:0;">
+                            Recent Medications
+                        </td>
+                        <td>
+                            {% for medication in data.medication|split:"$_$" %}
+                            {% if medication %}
+                            <li>{{medication}}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br style="clear:both"/>
+    </div>
+</div>
+<style>
+    table tr td {
+        padding: 5px;
+    }
+</style>
