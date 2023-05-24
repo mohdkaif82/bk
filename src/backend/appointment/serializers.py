@@ -37,17 +37,13 @@ class AppointmentSerializer(ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        
-        print("run")
         from ..patients.models import Patients
-        patient_data = validated_data.get('patient')
-        print(patient_data)
+        patient_data = validated_data.pop('patient')
         treatment_plans = validated_data.pop('treatment_plans', [])
-        if patient_data:
+        if patient_data.get('id', None):
             try:
-                # Patients.objects.get(id=patient_data.get('id'))
-                patient = Patients.objects.filter(id=patient_data).values('id').first()
-                print('get patient',patient['id'])
+                Patients.objects.get(id=patient_data.get('id'))
+                patient = Patients.objects.filter(id=patient_data.get('id')).values('id').first()
             except:
                 raise serializers.ValidationError("No such patient exists")
         else:
@@ -85,7 +81,6 @@ class AppointmentSerializer(ModelSerializer):
                 patient.practices.set(pdp)
                 patient.save()
                 patient = Patients.objects.filter(user__id=user_data['id']).values('id').first()
-                print('patient',patient)
         if "schedule_at" in validated_data and validated_data["schedule_at"] and "slot" in validated_data and \
                 validated_data["slot"]:
             validated_data["schedule_till"] = pd.to_datetime(validated_data["schedule_at"]) + timedelta(
