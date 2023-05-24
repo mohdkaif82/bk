@@ -81,6 +81,16 @@ class AppointmentViewSet(ModelViewSet):
             queryset = queryset.order_by('-schedule_at')
         return queryset
 
+    # def create(self, request, *args, **kwargs):
+    #     print(request.data)
+    #     ser=AppointmentSerializer(data=request.data)
+    #     if ser.is_valid():
+    #         ser.save()
+    #         print('posting')
+    #     else:
+    #         print('error is here',ser.errors)
+        
+    
     def update(self, request, *args, **kwargs):
         data = request.data
         queryset = super(AppointmentViewSet, self).get_queryset()
