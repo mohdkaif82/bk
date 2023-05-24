@@ -12,6 +12,7 @@ from ..practice.serializers import PracticeStaffSerializer, AppointmentCategoryS
     PracticeBasicSerializer, PracticeStaffBasicSerializer, PracticeBasicDataSerializer
 from ..utils.email import appointment_email
 from ..utils.sms import prepare_appointment_sms
+from ..practice.models import Practice
 
 
 class AppointmentSerializer(ModelSerializer):
@@ -37,17 +38,17 @@ class AppointmentSerializer(ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        
-        print("run")
         from ..patients.models import Patients
-        patient_data = validated_data.get('patient')
-        print(patient_data)
+        patient_data = validated_data.pop('patient')
+        print('patient',patient_data)
         treatment_plans = validated_data.pop('treatment_plans', [])
         if patient_data:
             try:
-                # Patients.objects.get(id=patient_data.get('id'))
-                patient = Patients.objects.filter(id=patient_data).values('id').first()
-                print('get patient',patient['id'])
+                print('run')
+                patient=Patients.objects.get(id=patient_data)
+                print('patient')
+                print('run2',patient.practice.id)
+                # patient = Patients.objects.filter(id=patient_data).values('id').first()
             except:
                 raise serializers.ValidationError("No such patient exists")
         else:
@@ -85,12 +86,19 @@ class AppointmentSerializer(ModelSerializer):
                 patient.practices.set(pdp)
                 patient.save()
                 patient = Patients.objects.filter(user__id=user_data['id']).values('id').first()
-                print('patient',patient)
         if "schedule_at" in validated_data and validated_data["schedule_at"] and "slot" in validated_data and \
                 validated_data["slot"]:
             validated_data["schedule_till"] = pd.to_datetime(validated_data["schedule_at"]) + timedelta(
                 minutes=validated_data["slot"])
-        appointment = Appointment.objects.create(**validated_data, patient=Patients.objects.get(id=patient['id']))
+        try:
+            print('id',patient)
+            appointment = Appointment.objects.create(**validated_data, patient=Patients.objects.get(id=patient['id']))
+            print('run3')
+        except:
+            print('run4')
+            appointment = Appointment.objects.create(**validated_data, patient=Patients.objects.get(id=patient.id),practice\
+                =Practice.objects.get(id=patient.practice.id))
+            print('run5')
         if len(treatment_plans):
             for treatment_plan in treatment_plans:
                 treatment_plan["procedure"] = treatment_plan["procedure"].pk if treatment_plan["procedure"] else None

@@ -2,7 +2,7 @@ from .models import Practice, PracticeCalenderSettings, AppointmentCategory, Pra
     VisitingTime, ProcedureCatalog, Taxes, DrugUnit, PaymentModes, PracticeOffers, PracticeReferer, \
     PracticeComplaints, Observations, Diagnoses, Investigations, Treatmentnotes, Filetags, Communications, LabPanel, \
     LabTestCatalog, DrugCatalog, DrugType, PracticeUserPermissions, PracticePrintSettings,PracticeStaffRelation,\
-    PushNotifications,Membership,Registration
+    PushNotifications,Membership,Registration,EmailCommunications
 from django.contrib import admin
 
 
@@ -14,6 +14,11 @@ class PracticeAdmin(admin.ModelAdmin):
 @admin.register(PracticeStaffRelation)
 class PracticeStaffRelation(admin.ModelAdmin):
     model = PracticeStaffRelation
+    
+
+@admin.register(EmailCommunications)
+class EmailCommunications(admin.ModelAdmin):
+    model = EmailCommunications
     
 @admin.register(Registration)
 class RegistrationRelation(admin.ModelAdmin):

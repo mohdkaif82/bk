@@ -76,8 +76,11 @@ def appointment_email(appointment, appointment_status, cron=False):
     from ..appointment.serializers import AppointmentSerializer
     try:
         appointment_data = Appointment.objects.get(id=appointment.id)
+        # appointment_data.practice=1
+        # appointment_data.save()
     except:
         return "Invalid Appointment"
+    print("App",appointment_data)
     to_send, base_template_url, email_template, email_subject = False, "appointment_email/", "", ""
     doctor = appointment_data.doctor if appointment_data and appointment_data.doctor else None
     patient = appointment_data.patient if appointment_data and appointment_data.patient else None
@@ -112,6 +115,7 @@ def appointment_email(appointment, appointment_status, cron=False):
             recipients.append(doctor.user.email)
         if is_patient_alo.email_enable:
             recipients.append(patient.user.email)
+        print('email res:', recipients)
         context = {'data': AppointmentSerializer(appointment_data).data, "logo": logo_url}
         Thread(target=send_from_template, args=(recipients, email_subject, email_template, context)).start()
         return True
