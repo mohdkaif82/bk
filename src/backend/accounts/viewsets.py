@@ -1,5 +1,6 @@
 import json
 import logging
+from .models import User
 from datetime import datetime
 from functools import partial
 from urllib.parse import urlencode
@@ -67,14 +68,34 @@ class UserViewSet(ModelViewSet):
                 data[parameter] = None
         return response.Ok(data)
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=["POST"], detail=False)
     def login(self, request):
-        message_body='thanks for login'
-        message_title='bk'
-        registration_id='fqcio3JVdOAY_MBX5R0wZN:APA91bGOut_Q0a4kKjBZFhcqglmYnOPSj3y0gaFDU6muVw77C3xL-pFZNdFV_yA9rZnDsrllVDqQ7YsS37qlgncY7YjXu9f02u46zy-QVR2SiJar-G_7XXew940aTQwqz6-9ihld0ZZi'
-        send_noti(message_body=message_body,registration_id=registration_id,message_title=message_title)
+        auth_pk = auth_login(request)
+    
+        user_get = User.objects.get(id=request.user.id)
+        token_get = request.POST.get("user_token")
+        device_get = request.POST.get("device")
+        application_get = request.POST.get("application")
+        
+        if auth_pk:
+            message_body = "thanks for login"
+            message_title = "BK Arogyam "
+            registration_id = "fqcio3JVdOAY_MBX5R0wZN:APA91bGOut_Q0a4kKjBZFhcqglmYnOPSj3y0gaFDU6muVw77C3xL-pFZNdFV_yA9rZnDsrllVDqQ7YsS37qlgncY7YjXu9f02u46zy-QVR2SiJar-G_7XXew940aTQwqz6-9ihld0ZZi"
+            n = UserFcm.objects.get_or_create(user=user_get,
+               
+                user_token=token_get,
+                device=device_get,
+                application=application_get,
+            )
+
+            send_noti(
+                message_body=message_body,
+                registration_id=registration_id,
+                message_title=message_title,
+            )
+
         # send_bulk_notification(data=message_body,registration_ids=registration_id)
-        return auth_login(request)
+        return auth_pk
 
     @action(methods=['GET'], detail=False)
     def generate_referer(self, request):
