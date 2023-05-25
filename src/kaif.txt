@@ -64,6 +64,6 @@ xmltodict==0.12.0
 
 
 
-##Token for git for bk repo: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
+##Token for git for bk repo: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
 
 
