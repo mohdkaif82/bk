@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pandas as pd
 from ..accounts.models import User
-from .models import Appointment, BlockCalendar
+from .models import Appointment, BlockCalendar,OPD,AssignOPD
 from ..base.serializers import ModelSerializer, serializers
 from ..patients.models import PatientMedicalHistory, PatientGroups, PatientProcedure, PersonalDoctorsPractice
 from ..patients.serializers import PatientProcedureSerializer, PatientProcedureDataSerializer, \
@@ -168,3 +168,46 @@ class AppointmentDataSerializer(ModelSerializer):
 
     def get_creator(self, obj):
         return obj.created_by.first_name if obj.created_by else None
+
+
+class OpdSerializer(ModelSerializer):
+    # doctor=serializers.SerializerMethodField(required=False)
+    class Meta:
+        model = OPD
+        fields = "__all__"
+        
+    def create(self, validated_data):
+        print('run',validated_data)
+        doctor = validated_data.pop('doctor')
+        name=validated_data.get('name')
+        if doctor:
+            if OPD.objects.filter(name=name).exists():
+                opd=OPD.objects.create(name=name,doctor=doctor,is_active=True)
+                return opd
+        raise serializers.ValidationError("No such doctor exists")
+
+        # print('doctor',doctor)
+        
+        
+class AssignOpdSerializer(ModelSerializer):
+    # opd=serializers.SerializerMethodField(required=False)
+    # appoinment=serializers.SerializerMethodField(required=False)
+    class Meta:
+        model = AssignOPD
+        fields = "__all__"
+        
+    def retrieve(self, request,validated_data):
+        print("Retrieving runtime")
+        
+
+        
+    def create(self, validated_data):
+        print('run',validated_data)
+        appoinment = validated_data.pop('appoinment')
+        opd=validated_data.get('opd')
+        if not opd:
+            raise serializers.ValidationError("Please provide the opd")
+        if not appoinment:
+            raise serializers.ValidationError("Please provide appoinment")
+        assignopd=AssignOPD.objects.create(opd=opd,appoinment=appoinment)
+        return assignopd
