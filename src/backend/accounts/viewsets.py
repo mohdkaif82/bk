@@ -44,6 +44,28 @@ parse_password_reset_data = partial(_parse_data, cls=PasswordResetSerializer)
 
 
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import UserSerializer
+
+class SignupView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        return Response(users.values(), status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        print(request.data,"pppppppppppppppppppppppppppp")
+
+        pa=request.data['password']
+        if serializer.is_valid():
+            # user = User.objects.create_user( password='password')
+            ser=serializer.save()
+            usr=User.objects.get(id=ser.id)
+            usr.set_password(pa)
+            usr.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(ModelViewSet):
@@ -88,11 +110,11 @@ class UserViewSet(ModelViewSet):
                 application=application_get,
             )
 
-            send_noti(
-                message_body=message_body,
-                registration_id=registration_id,
-                message_title=message_title,
-            )
+            # send_noti(
+            #     message_body=message_body,
+            #     registration_id=registration_id,
+            #     message_title=message_title,
+            # )
 
         # send_bulk_notification(data=message_body,registration_ids=registration_id)
         return auth_pk

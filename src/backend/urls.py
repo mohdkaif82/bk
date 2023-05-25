@@ -20,10 +20,11 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
-
+from backend.accounts.viewsets import SignupView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/users/signup/', SignupView.as_view(), name='get_and_post'),
     path('erp-api/password_reset/', include('django_rest_passwordreset.urls')),
     path('erp-api/', include(restricted_router.urls)),
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
