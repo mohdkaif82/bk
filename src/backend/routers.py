@@ -1,5 +1,5 @@
 from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet
-from .appointment.viewsets import AppointmentViewSet
+from .appointment.viewsets import AppointmentViewSet,OpdViewSet,AssignOpdViewSet
 from .base.api.routers import PlutonicRouter
 from .billing.viewsets import PatientInvoicesViewSet, PatientPaymentViewSet, PatientsPromoCodeViewSet, \
     PatientWalletViewSet, PatientWalletLedgerViewSet, ReturnPaymentViewSet, PatientProformaInvoicesViewSet
@@ -51,6 +51,9 @@ restricted_router.register(r'wallet_ledger', PatientWalletLedgerViewSet, basenam
 
 # Appointment App
 restricted_router.register(r'appointment', AppointmentViewSet, basename='v1_appointment')
+restricted_router.register(r'opd', OpdViewSet, basename='v1_opd')
+restricted_router.register(r'assign_opd', AssignOpdViewSet, basename='v1_opd')
+
 
 # BLOG API
 restricted_router.register(r'post', PostViewSet, basename='v1_post')
