@@ -1,4 +1,4 @@
-from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet
+from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet
 from .appointment.viewsets import AppointmentViewSet
 from .base.api.routers import PlutonicRouter
 from .billing.viewsets import PatientInvoicesViewSet, PatientPaymentViewSet, PatientsPromoCodeViewSet, \
@@ -28,6 +28,8 @@ restricted_router = PlutonicRouter()
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
+restricted_router.register(r'doctor_auth',DoctorViewSet, basename='v1_doctor_view_set')
+
 
 # Practice App
 restricted_router.register(r'clinics', PracticeViewSet, basename='v1_practice')
@@ -123,3 +125,5 @@ restricted_router.register(r'app-yotube', AppYoutubeViewSet, basename='v1_app_yo
 restricted_router.register(r'app-yotube-category', AppYoutubeCategoryViewSet, basename='v1_app_youtube_category')
 
 
+#Doctor app 
+# restricted_router.register(r'signup',DoctorViewSet, basename='v1_doctor_view_set')

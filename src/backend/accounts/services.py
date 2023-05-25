@@ -172,3 +172,52 @@ def auth_register_user(request):
         user.save()
 
     return request.data
+
+
+def auth_register_doctor(request):
+    """
+    params: request
+    return: user
+    """
+    UserModel = get_user_model()
+    # User details to create an user
+    data = parse_register_user_data(request.data)
+    print('data print kro',data)
+    password=data.get('password')
+    user_data = User(
+        email=data.get('email'),
+        password=data.get('password'),
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name'),
+        mobile=request.POST.get('mobile'),
+    )
+    print(user_data,'mobile',request.POST.get('mobile'))
+
+    user = None
+    # Check email is register as a active user
+    try:
+        user = get_user_model().objects.get(email=data.get('email'), is_active=True)
+    except get_user_model().DoesNotExist:
+        pass
+
+    # if user is not exist, create a Inactive user
+    if not user:
+        un_active_user = UserModel.objects.filter(email=user_data.email, is_active=False)
+        if un_active_user:
+            UserModel.objects.filter(email=user_data.email, is_active=False).delete()
+
+        user = UserModel.objects.create_user(**dict(user_data._asdict()))
+        print(user)
+        # user.set_password(password)
+        # user.save()
+
+    if user and data.get('referer_code') and User.objects.filter(referer_code=data.get('referer_code')).exists():
+        user.referer = User.objects.filter(referer_code=data.get('referer_code'))[0]
+        user.save()
+        
+    PracticeStaff.objects.get_or_create(user=user,department=data.get('department'),\
+        designation=data.get('designation'))
+
+    return request.data
+
+
