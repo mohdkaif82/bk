@@ -143,6 +143,7 @@ def auth_register_user(request):
     # User details to create an user
     data = parse_register_user_data(request.data)
     print('data print kro',data)
+    print('referer_code',request.POST.get('referer_code'))
     user_data = User(
         email=data.get('email'),
         password=data.get('password'),
@@ -167,8 +168,8 @@ def auth_register_user(request):
 
         user = UserModel.objects.create_user(**dict(user_data._asdict()))
 
-    if user and data.get('referer_code') and User.objects.filter(referer_code=data.get('referer_code')).exists():
-        user.referer = User.objects.filter(referer_code=data.get('referer_code'))[0]
+    if user and request.POST.get('referer_code') and UserModel.objects.filter(referer_code=request.POST.get('referer_code')).exists():
+        user.referer = UserModel.objects.filter(referer_code=request.POST.get('referer_code'))[0]
         user.save()
 
     return request.data

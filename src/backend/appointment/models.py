@@ -62,5 +62,6 @@ class AssignOPD(TimeStampedModel):
     opd=models.ForeignKey(OPD,on_delete=models.PROTECT)
     appoinment=models.ForeignKey(Appointment, on_delete=models.PROTECT)
     
+    
     def __str__(self):
         return 'OPD:'+str(self.opd)+'is booked for '+str(self.appoinment)

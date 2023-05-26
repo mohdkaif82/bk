@@ -180,3 +180,17 @@ class UserFcm(models.Model):
     application = models.CharField(max_length=1024, blank=True, null=True)
     device = models.CharField(max_length=1024, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    
+class SocialMedia(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)
+    youtube= models.CharField(max_length=500,null=True, blank=True)
+    facebook= models.CharField(max_length=500,null=True,blank=True)
+    instagram= models.CharField(max_length=500,null=True,blank=True)
+    twitter= models.CharField(max_length=500,null=True,blank=True)
+    quora= models.CharField(max_length=500,null=True,blank=True)
+    linkdin= models.CharField(max_length=500,null=True,blank=True)
+    printrest= models.CharField(max_length=500,null=True,blank=True)
+    website= models.CharField(max_length=500,null=True,blank=True)
+    
+    def __str__(self):
+        return str(self.user)
