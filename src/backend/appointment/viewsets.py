@@ -727,8 +727,7 @@ class AssignOpdViewSet(ModelViewSet):
     
     # @action('put',detail=False)
     
-    def retrieve(self, request, *args, **kwargs):
-        print("review")
+    
     def update(self, request, *args, **kwargs):
         print('run update')
         instance = self.get_object()

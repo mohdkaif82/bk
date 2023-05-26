@@ -1,4 +1,4 @@
-from .models import User, Role, SMS_Records, PatientLogin, StaffLogin, TaskLogin
+from .models import User, Role, SMS_Records, PatientLogin, StaffLogin, TaskLogin,SocialMedia
 from ..base.serializers import ModelSerializer
 from ..constants import CONFIG
 from ..patients.models import Patients
@@ -193,3 +193,24 @@ class TaskLoginSerializer(ModelSerializer):
     class Meta:
         model = TaskLogin
         fields = '__all__'
+
+
+class SocialMediaSerializer(ModelSerializer):
+    
+    class Meta:
+        model = SocialMedia
+        fields = "__all__"
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user if request else None
+        if not user:
+            raise serializers.ValidationError("Please provide the user")
+        if SocialMedia.objects.filter(user=user).exists():
+            assignopd=SocialMedia.objects.get(user=user)
+        else:
+            assignopd=SocialMedia.objects.create(**validated_data, user=user)
+        return assignopd
+    
+    # def get_opd(self, obj):
+    #     return OpdSerializer(obj.opd).data

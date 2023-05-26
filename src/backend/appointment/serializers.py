@@ -36,7 +36,7 @@ class AppointmentSerializer(ModelSerializer):
     class Meta:
         model = Appointment
         fields = '__all__'
-
+    
     def create(self, validated_data):
         from ..patients.models import Patients
         patient_data = validated_data.pop('patient')
@@ -190,16 +190,10 @@ class OpdSerializer(ModelSerializer):
         
         
 class AssignOpdSerializer(ModelSerializer):
-    # opd=serializers.SerializerMethodField(required=False)
-    # appoinment=serializers.SerializerMethodField(required=False)
+    
     class Meta:
         model = AssignOPD
         fields = "__all__"
-        
-    def retrieve(self, request,validated_data):
-        print("Retrieving runtime")
-        
-
         
     def create(self, validated_data):
         print('run',validated_data)
@@ -211,3 +205,6 @@ class AssignOpdSerializer(ModelSerializer):
             raise serializers.ValidationError("Please provide appoinment")
         assignopd=AssignOPD.objects.create(opd=opd,appoinment=appoinment)
         return assignopd
+    
+    def get_opd(self, obj):
+        return OpdSerializer(obj.opd).data
