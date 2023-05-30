@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+
+import random
+import string
+
 class Wallet(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -11,13 +15,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-################################################################
 ###promocode
-from django.db import models
-import random
-import string
-
-from django.contrib.auth.models import User
 
 class PromoCode(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
