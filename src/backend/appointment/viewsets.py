@@ -7,9 +7,10 @@ from datetime import timedelta, datetime
 
 import pandas as pd
 from ..accounts.models import User
-from .models import Appointment, BlockCalendar
+from .models import Appointment, BlockCalendar,OPD,AssignOPD
 from .permissions import AppointmentPermissions
-from .serializers import AppointmentSerializer, BlockCalendarSerializer, AppointmentDataSerializer
+from .serializers import AppointmentSerializer, BlockCalendarSerializer, AppointmentDataSerializer,OpdSerializer,\
+    AssignOpdSerializer
 from .services import update_block_calendar
 from ..base import response
 from ..base.api.pagination import StandardResultsSetPagination
@@ -692,3 +693,46 @@ class AppointmentViewSet(ModelViewSet):
             return response.Ok(output)
         else:
             return response.BadRequest({"detail": "Please select a Clinic"})
+
+
+class OpdViewSet(ModelViewSet):
+    serializer_class = OpdSerializer
+    queryset = OPD.objects.all()
+    permission_classes = ('')
+    
+    def get_queryset(self):
+        queryset = super(OpdViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+    
+    # @action('put',detail=False)
+    def update(self, request, *args, **kwargs):
+        print('run update')
+        instance = self.get_object()
+        print('update instance',instance)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return response.Ok(serializer.data)
+    
+class AssignOpdViewSet(ModelViewSet):
+    serializer_class = AssignOpdSerializer
+    queryset = AssignOPD.objects.all()
+    permission_classes = ('')
+    
+    # def get_queryset(self):
+    #     queryset = super(AssignOpdViewSet, self).get_queryset()
+    #     queryset = queryset.filter(is_active=True)
+    #     return queryset
+    
+    # @action('put',detail=False)
+    
+    
+    def update(self, request, *args, **kwargs):
+        print('run update')
+        instance = self.get_object()
+        print('update instance',instance)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return response.Ok(serializer.data)

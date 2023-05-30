@@ -12,6 +12,16 @@ APPOINTMENT_STATUS_CHOICES = (
     ('No Show', 'NO SHOW')
 )
 
+class OPD(TimeStampedModel):
+    name=models.CharField(max_length=50)
+    is_active=models.BooleanField(default=True)
+    doctor=models.ForeignKey(PracticeStaff, null=True, on_delete=models.PROTECT)
+    
+    def __str__(self):
+        return 'OPD name is : '+ str(self.name)
+    
+    
+    
 
 class Appointment(TimeStampedModel):
     from ..patients.models import Patients, PatientProcedure
@@ -46,3 +56,12 @@ class BlockCalendar(TimeStampedModel):
     doctor = models.ForeignKey(PracticeStaff, blank=True, null=True, on_delete=models.PROTECT)
     allow_booking = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+
+class AssignOPD(TimeStampedModel):
+    opd=models.ForeignKey(OPD,on_delete=models.PROTECT)
+    appoinment=models.ForeignKey(Appointment, on_delete=models.PROTECT)
+    
+    
+    def __str__(self):
+        return 'OPD:'+str(self.opd)+'is booked for '+str(self.appoinment)

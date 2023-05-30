@@ -1,6 +1,6 @@
 import binascii
 import os
-
+import secrets
 from ..utils import timezone
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager
@@ -9,6 +9,10 @@ from django.db import models
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+def create_reftoken(self, user):
+        token = secrets.token_urlsafe(20)
+        print('the token is:',token)
+        return token
 
 def _generate_code():
     return binascii.hexlify(os.urandom(20))
@@ -25,11 +29,14 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Email must be set for the user')
         email = self.normalize_email(email)
+        # print(reftoken)
         user = self.model(email=email, mobile=mobile, first_name=first_name, last_name=last_name,
                           is_staff=is_staff, is_active=is_active,
                           is_superuser=is_superuser, last_login=now,
                           date_joined=now, **extra_fields)
         user.set_password(password)
+        reftoken= create_reftoken(self,user)
+        user.referer_code=reftoken
         user.save(using=self._db)
         return user
 

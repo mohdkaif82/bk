@@ -1,6 +1,6 @@
 import json
 import logging
-from .models import User
+from .models import User,SocialMedia
 from datetime import datetime
 from functools import partial
 from urllib.parse import urlencode
@@ -8,10 +8,10 @@ from urllib.request import urlopen
 
 from .crons import update_referer
 from .models import PasswordResetCode, PatientLogin, StaffLogin, TaskLogin, UserFcm
-from .permissions import UserPermissions, PatientLoginPermissions, StaffLoginPermissions
+from .permissions import UserPermissions, PatientLoginPermissions, StaffLoginPermissions,SocialMediaPermissions
 from .serializers import UserSerializer, PermissionSerializer, GroupSerializer, PasswordResetSerializer, \
     SMS_RecordsSerializers, PatientLoginSerializer, StaffLoginSerializer, UserSerializer as UserRestrictedSerializer, \
-    TaskLoginSerializer
+    TaskLoginSerializer,SocialMediaSerializer
 from .services import _parse_data, auth_login, auth_password_change, auth_register_user, user_clone_api, \
     create_user_token,auth_register_doctor
 from ..base import response
@@ -859,3 +859,27 @@ class DoctorViewSet(ModelViewSet):
         user.save()
         content = {'success': 'User Deactivted successfully.'}
         return response.Ok(content)
+    
+
+class SocialMediaViewSet(ModelViewSet):
+    queryset = SocialMedia.objects.all()
+    permission_classes = (SocialMediaPermissions,)
+    serializer_class = SocialMediaSerializer
+    parser_classes = (JSONParser, MultiPartParser)
+    
+    def get_queryset(self):
+        queryset = super(SocialMediaViewSet, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
+    
+    def update(self, request, *args, **kwargs):
+        print('run update')
+        instance = self.get_object()
+        if request.user==instance.user:
+            print('update instance',instance)
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return response.Ok(serializer.data)
+        content = {'detail': 'You are not allowed to perform this action'}
+        return response.BadRequest(content)

@@ -66,3 +66,17 @@ class StaffLoginPermissions(ResourcePermission):
     verify_otp_perms = AllowAny()
     resend_otp_perms = AllowAny()
     switch_perms = IsAuthenticated()
+
+
+class SocialMediaPermissions(ResourcePermission):
+    enough_perms = IsAuthenticated()
+    global_perms = None
+    retrieve_perms = IsTheSameUser()
+    create_perms = IsAuthenticated()
+    update_perms = IsTheSameUser()
+    partial_update_perms = IsTheSameUser()
+    destroy_perms = IsTheSameUser()
+    send_otp_perms = AllowAny()
+    verify_otp_perms = AllowAny()
+    resend_otp_perms = AllowAny()
+    switch_perms = IsAuthenticated()

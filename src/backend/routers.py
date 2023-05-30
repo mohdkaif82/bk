@@ -1,5 +1,4 @@
-from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet,userSignupView
-
+from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet
 from .appointment.viewsets import AppointmentViewSet
 from .base.api.routers import PlutonicRouter
 from .billing.viewsets import PatientInvoicesViewSet, PatientPaymentViewSet, PatientsPromoCodeViewSet, \
@@ -26,12 +25,13 @@ from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlo
 restricted_router = PlutonicRouter()
 #userSignupView
 # Auth App
-restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
+# restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
 
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
 restricted_router.register(r'doctor_auth',DoctorViewSet, basename='v1_doctor_view_set')
+# restricted_router.register(r'socialmedia',SocialMediaViewSet, basename='v1_socialmedia_view_set')
 
 
 # Practice App
@@ -54,6 +54,9 @@ restricted_router.register(r'wallet_ledger', PatientWalletLedgerViewSet, basenam
 
 # Appointment App
 restricted_router.register(r'appointment', AppointmentViewSet, basename='v1_appointment')
+# restricted_router.register(r'opd', OpdViewSet, basename='v1_opd')
+# restricted_router.register(r'assign_opd', AssignOpdViewSet, basename='v1_opd')
+
 
 # BLOG API
 restricted_router.register(r'post', PostViewSet, basename='v1_post')
