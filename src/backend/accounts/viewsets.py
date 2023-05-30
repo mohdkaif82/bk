@@ -56,7 +56,6 @@ class SignupView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         referalcode=request.data.get('referalcode')
-        print(request.data,"pppppppppppppppppppppppppppp")
 
         pa=request.data['password']
         if serializer.is_valid():
@@ -72,6 +71,97 @@ class SignupView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class userSignupView(ModelViewSet):
+    
+    queryset = get_user_model().objects.all()
+    permission_classes = ('')
+    serializer_class = UserSerializer
+
+    @action(methods=['GET'], detail=False)
+    def config(self, request):
+        data = {}
+        parameters = request.query_params.get("parameters", None)
+        param_list = parameters.split(",") if parameters else []
+        CONFIG["config_date_time"] = now_local()
+        CONFIG["config_date_only"] = now_local(True)
+        for parameter in param_list:
+            if parameter in CONFIG:
+                data[parameter] = CONFIG[parameter]
+            else:
+                data[parameter] = None
+        return response.Ok(data)
+
+    @action(methods=["POST"], detail=False)
+    def login(self, request):
+        auth_pk = auth_login(request)
+    
+        user_get = User.objects.get(id=request.user.id)
+        token_get = request.POST.get("user_token")
+        device_get = request.POST.get("device")
+        application_get = request.POST.get("application")
+        
+        
+        if auth_pk:
+            message_body = "thanks for login"
+            message_title = "BK Arogyam "
+            registration_id = "fqcio3JVdOAY_MBX5R0wZN:APA91bGOut_Q0a4kKjBZFhcqglmYnOPSj3y0gaFDU6muVw77C3xL-pFZNdFV_yA9rZnDsrllVDqQ7YsS37qlgncY7YjXu9f02u46zy-QVR2SiJar-G_7XXew940aTQwqz6-9ihld0ZZi"
+            n = UserFcm.objects.get_or_create(user=user_get,
+               
+                user_token=token_get,
+                device=device_get,
+                application=application_get,
+            )
+
+            # send_noti(
+            #     message_body=message_body,
+            #     registration_id=registration_id,
+            #     message_title=message_title,
+            # )
+
+        # send_bulk_notification(data=message_body,registration_ids=registration_id)
+        return auth_pk
+
+    @action(methods=['GET'], detail=False)
+    def generate_referer(self, request):
+        count = update_referer()
+        return response.Ok({"count": count})
+
+    @action(methods=['POST'], detail=False)
+    def logout(self, request):
+        user_token = request.data.get('user_token', None)
+        device = request.data.get('device', None)
+        application = request.data.get('application', None)
+        Token.objects.filter(user=request.user).delete()
+        UserFcm.objects.filter(user_token=user_token, device=device, application=application).delete()
+        logout(request)
+        return response.Ok({"detail": "Successfully logged out."})
+
+    @action(methods=['POST'], detail=False)
+    def passwordchange(self, request):
+        data = auth_password_change(request)
+        user, new_password = request.user, data.get('new_password')
+        if user.check_password(data.get('old_password')):
+            user.set_password(new_password)
+            user.save()
+            content = {'success': 'Password changed successfully.'}
+            return response.Ok(content)
+        else:
+            content = {'detail': 'Old password is incorrect.'}
+            return response.BadRequest(content)
+
+    @action(methods=['POST'], detail=False)
+    def register(self, request):
+        data = auth_register_doctor(request)
+        return response.Created(data)
+
+    @action(methods=['POST'], detail=True)
+    def deactivate(self, request):
+        user = self.get_object()
+        is_active = request.data('is_active')
+        user.is_active = is_active
+        user.save()
+        content = {'success': 'User Deactivted successfully.'}
+        return response.Ok(content)
 
 class UserViewSet(ModelViewSet):
     """
@@ -779,7 +869,6 @@ class DoctorViewSet(ModelViewSet):
     @action(methods=['POST'], detail=False)
     def register(self, request):
         data = auth_register_doctor(request)
-        print('data in views',data)
         return response.Created(data)
 
     @action(methods=['POST'], detail=True)
@@ -804,10 +893,8 @@ class SocialMediaViewSet(ModelViewSet):
         return queryset
     
     def update(self, request, *args, **kwargs):
-        print('run update')
         instance = self.get_object()
         if request.user==instance.user:
-            print('update instance',instance)
             serializer = self.get_serializer(instance, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
