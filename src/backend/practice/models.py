@@ -575,3 +575,14 @@ class PermissionGroup(TimeStampedModel):
     permissions = models.ManyToManyField(Permissions, blank=True)
     is_global = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+
+class NoticeBoard(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(PracticeStaff, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    
+    
+

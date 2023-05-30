@@ -11,7 +11,7 @@ from .models import Practice, PracticeCalenderSettings, MedicineBookingPackage, 
     PracticeVitalSign, Communications, EmailCommunications, LabPanel, LabTestCatalog, DrugCatalog, ExpenseType, \
     Expenses, Vendor, ActivityLog, PracticeUserPermissions, DrugType, DrugUnit, PracticePrintSettings, \
     PracticeStaffRelation, PrescriptionTemplate, Advice, DrugCatalogTemplate, RoomTypeSettings, BedBookingPackage, \
-    Medication, PushNotifications, Permissions, PermissionGroup, Registration
+    Medication, PushNotifications, Permissions, PermissionGroup, Registration,NoticeBoard
 
 
 class MembershipSerializer(ModelSerializer):
@@ -25,7 +25,11 @@ class RegistrationSerializer(ModelSerializer):
         model = Registration
         fields = '__all__'
 
-
+class NoticeBoardSerializer(ModelSerializer):
+    class Meta:
+        model = NoticeBoard
+        fields = '__all__'
+        
 class PracticeStaffBasicSerializer(ModelSerializer):
     user = PatientUserSerializer(required=True)
     department_data = serializers.SerializerMethodField(required=False)

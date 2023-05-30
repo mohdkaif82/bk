@@ -142,8 +142,6 @@ def auth_register_user(request):
     UserModel = get_user_model()
     # User details to create an user
     data = parse_register_user_data(request.data)
-    print('data print kro',data)
-    print('referer_code',request.POST.get('referer_code'))
     user_data = User(
         email=data.get('email'),
         password=data.get('password'),

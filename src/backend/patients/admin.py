@@ -3,7 +3,8 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, \
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, State, City, Country, \
     PatientFile, PatientPrescriptions, PatientInvoices, PatientPayment, \
     PatientMembership, ProcedureCatalogInvoice,PatientWallet,AdvisorBank,PatientCallNotes,MedicalCertificate, \
-        PatientNotes,PatientRegistration,Source,PatientProcedure,RequestOTP,PatientAdvice
+        PatientNotes,PatientRegistration,Source,PatientProcedure,RequestOTP,PatientAdvice,\
+        PatientAllopathicMedicines
 
 
 @admin.register(PatientGroups)
@@ -13,6 +14,10 @@ class PatientGroupsAdmin(admin.ModelAdmin):
 @admin.register(AdvisorBank)
 class AdvisorBankAdmin(admin.ModelAdmin):
     model = AdvisorBank
+    
+@admin.register(PatientAllopathicMedicines)
+class PatientAllopathicMedicinesAdmin(admin.ModelAdmin):
+    model = PatientAllopathicMedicines
     
 
 @admin.register(PatientAdvice)

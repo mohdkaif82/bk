@@ -1,5 +1,6 @@
 from .models import Category, Tags, VideoFile, Disease, Events, ContactUs, PageSEO, Slider, Facility, \
-    LandingPageContent, LandingPageVideo, Rating, Comment, BlogImage, ProductContent, TherapyContent
+    LandingPageContent, LandingPageVideo, Rating, Comment, BlogImage, ProductContent, TherapyContent,DiseaseList,\
+    SymptomList
 from django.contrib import admin
 
 
@@ -15,9 +16,16 @@ class TagsAdmin(admin.ModelAdmin):
 class VideoFileAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(SymptomList)
+class SymptomListAdmin(admin.ModelAdmin):
+    pass 
 
 @admin.register(Disease)
 class DiseaseAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(DiseaseList)
+class DiseaseListAdmin(admin.ModelAdmin):
     pass
 
 
