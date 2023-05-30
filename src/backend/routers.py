@@ -1,4 +1,5 @@
-from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet
+from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet,userSignupView
+
 from .appointment.viewsets import AppointmentViewSet
 from .base.api.routers import PlutonicRouter
 from .billing.viewsets import PatientInvoicesViewSet, PatientPaymentViewSet, PatientsPromoCodeViewSet, \
@@ -23,8 +24,10 @@ from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesVi
 from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlogViewSet,AppBlogCategoryViewSet,AppYoutubeCategoryViewSet,AppYoutubeViewSet
 
 restricted_router = PlutonicRouter()
-
+#userSignupView
 # Auth App
+restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
+
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
