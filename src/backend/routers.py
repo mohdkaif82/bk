@@ -1,4 +1,4 @@
-from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet,SocialMediaViewSet
+from .accounts.viewsets import UserViewSet, PatientLoginViewSet, StaffLoginViewSet,DoctorViewSet,SocialMediaViewSet,userSignupView
 from .appointment.viewsets import AppointmentViewSet,OpdViewSet,AssignOpdViewSet
 from .base.api.routers import PlutonicRouter
 from .billing.viewsets import PatientInvoicesViewSet, PatientPaymentViewSet, PatientsPromoCodeViewSet, \
@@ -16,15 +16,17 @@ from .mission_arogyam.viewsets import ArogyamPostViewSet, ArogyamVideoFileViewSe
 from .mlm.viewsets import ProductMarginViewSet, RoleComissionViewSet
 from .mlm_compensation.viewsets import PointsToBusinessAdvisorViewSet, ProductMarginAdvisorViewSet, RoleComissionAdvisorViewSet
 from .muster_roll.viewsets import HrSettingsViewSet, TasksViewSet
-from .patients.viewsets import PatientViewSet
+from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet
 from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesViewSet, \
-    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet
+    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet
 
 from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlogViewSet,AppBlogCategoryViewSet,AppYoutubeCategoryViewSet,AppYoutubeViewSet
 
 restricted_router = PlutonicRouter()
-
+#userSignupView
 # Auth App
+restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
+
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
@@ -37,9 +39,16 @@ restricted_router.register(r'clinics', PracticeViewSet, basename='v1_practice')
 restricted_router.register(r'staff', PracticeStaffViewSet, basename='v1_staff')
 restricted_router.register(r'activity', ActivityLogViewSet, basename='v1_activity')
 restricted_router.register(r'notification', PushNotificationViewSet, basename='v1_notification')
+restricted_router.register(r'noticeboard', NoticeBoardViewSet, basename='v1_NoticeBoardViewSet')
 
 # Patient App
 restricted_router.register(r'patients', PatientViewSet, basename='v1_patient')
+
+#AllopathToAyurvedaViewSet
+restricted_router.register(r'searchmedican', SearchMedicanViewSet, basename='v1_searchmedican')
+restricted_router.register(r'symptoms', SymptomsViewSet, basename='v1_symptoms')
+restricted_router.register(r'diseases', DiseasesViewSet, basename='v1_diseases')
+
 
 # Billing App
 restricted_router.register(r'promocode', PatientsPromoCodeViewSet, basename='v1_promo_code')

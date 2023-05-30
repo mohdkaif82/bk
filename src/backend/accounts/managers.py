@@ -8,6 +8,7 @@ from django.core import signing
 from django.db import models
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from ..doctors.models import Wallet
 
 def create_reftoken(self, user):
         token = secrets.token_urlsafe(20)
@@ -38,6 +39,7 @@ class UserManager(BaseUserManager):
         reftoken= create_reftoken(self,user)
         user.referer_code=reftoken
         user.save(using=self._db)
+        Wallet.objects.get_or_create(user=user,balance=50)
         return user
 
     def create_user(self, first_name, last_name, mobile, email, password=None, **extra_fields):

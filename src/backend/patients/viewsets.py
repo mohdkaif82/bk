@@ -10,6 +10,8 @@ import pandas as pd
 import xmltodict
 from ..accounts.models import User
 from ..appointment.models import Appointment
+from ..blog.models import *
+from ..blog.serializers import *
 from ..base import response
 from ..base.api.pagination import StandardResultsSetPagination
 from ..base.api.viewsets import ModelViewSet
@@ -408,8 +410,12 @@ class PatientViewSet(ModelViewSet):
             return response.Ok(PatientAllopathicMedicinesSerializer(queryset, many=True).data)
         else:
             print('run post method')
-            return response.Ok(create_update_multiple_record(list(request.data), PatientAllopathicMedicinesSerializer,
-                                                             PatientAllopathicMedicines))
+            ser=PatientAllopathicMedicinesSerializer(data=request.data)
+            ser.is_valid(raise_exception=True)
+            ser.save()
+            return response.Ok(ser.data)
+            # return response.Ok(create_update_multiple_record(list(request.data), PatientAllopathicMedicinesSerializer,
+            #                                                  PatientAllopathicMedicines))
 
     @action(methods=['POST'], detail=False)
     def generate_otp(self, request):
@@ -2272,3 +2278,82 @@ class PatientViewSet(ModelViewSet):
         data = sorted(data, key=lambda x: weighted(x["date"]))
         return response.Ok(data)
 
+class SearchMedicanViewSet(ModelViewSet):
+    serializer_class = PatientAllopathicMedicinesSerializer
+    queryset = PatientAllopathicMedicines.objects.all()
+    permission_classes = (PatientsPermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    def get_queryset(self):
+        queryset = super(SearchMedicanViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        name = self.request.query_params.get("name", None)
+        if name:
+            queryset=PatientAllopathicMedicines.objects.filter(name__icontains=name)
+        return queryset
+    
+    def create(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    def update(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+
+class SymptomsViewSet(ModelViewSet):
+    serializer_class = SymptomListSerializer
+    queryset = SymptomList.objects.all()
+    permission_classes = (PatientsPermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    def get_queryset(self):
+        queryset = super(SymptomsViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        name = self.request.query_params.get("name", None)
+        if name:
+            queryset=SymptomList.objects.filter(name__icontains=name)
+        return queryset
+    
+    def create(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    def update(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+
+class DiseasesViewSet(ModelViewSet):
+    serializer_class = DiseaseListSerializer
+    queryset = DiseaseList.objects.all()
+    permission_classes = (PatientsPermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    def get_queryset(self):
+        queryset = super(DiseasesViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        name = self.request.query_params.get("name", None)
+        if name:
+            queryset=DiseaseList.objects.filter(name__icontains=name)
+        return queryset
+    
+    def create(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    def update(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})

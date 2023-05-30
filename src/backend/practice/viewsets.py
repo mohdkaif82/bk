@@ -19,7 +19,7 @@ from .models import Practice, PracticeCalenderSettings, ProcedureCatalog, Taxes,
     DrugCatalog, ExpenseType, AppointmentCategory, Vendor, Expenses, ActivityLog, DrugType, DrugUnit, \
     PracticeUserPermissions, PracticePrintSettings, PrescriptionTemplate, RoomTypeSettings, VisitingTime, Membership, \
     PracticeVitalSign, PracticeStaffRelation, MedicineBookingPackage, BedBookingPackage, OtherDiseases, Medication, \
-    PushNotifications, PermissionGroup
+    PushNotifications, PermissionGroup,NoticeBoard
 from .permissions import PracticePermissions as PracticeClientPermissions, PracticeStaffPermissions, \
     VendorPermissions, ExpensesPermissions, ActivityLogPermissions, DrugTypePermissions, DrugUnitPermissions, \
     PracticeUserPermissionsPermissions
@@ -36,7 +36,7 @@ from .serializers import PracticeSerializer, PracticeCalenderSettingsSerializer,
     PracticeStaffRelationDataSerializer, MedicineBookingPackageSerializer, BedBookingPackageSerializer, \
     BedBookingPackageDataSerializer, MedicineBookingPackageDataSerializer, OtherDiseasesSerializer, \
     MedicationSerializer, PushNotificationSerializer, PushNotificationSaveSerializer, RegistrationSerializer, \
-    PermissionGroupSerializer
+    PermissionGroupSerializer,NoticeBoardSerializer
 from .services import update_pratice_related_object, get_appoinment_report, seat_availability, \
     update_pratice_related_calender_object, update_pratice_related_drug_object, update_prescription_template, \
     payment_capture, get_emr_report, dict_to_mail
@@ -1520,3 +1520,15 @@ class PushNotificationViewSet(ModelViewSet):
         if application:
             queryset = queryset.filter(application=application) | queryset.filter(application=None)
         return queryset.order_by('-id')
+    
+class NoticeBoardViewSet(ModelViewSet):
+    serializer_class = NoticeBoardSerializer
+    queryset = NoticeBoard.objects.all()
+    permission_classes = (PracticeUserPermissionsPermissions,)
+    parser_classes = (JSONParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+    
+    def get_queryset(self):
+        queryset = super(NoticeBoardViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset

@@ -40,6 +40,7 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 )
 
 LIBS = (
@@ -64,11 +65,13 @@ APPS = (
     'backend.blog',
     'backend.inventory',
     'backend.mlm',
+    'backend.doctors',
     'backend.meeting',
     'backend.muster_roll',
     'backend.mission_arogyam',
     'backend.android_user',
     'backend.mlm_compensation',
+    
 )
 
 INSTALLED_APPS = DJANGO_APPS + LIBS + APPS
