@@ -13,7 +13,7 @@ from .serializers import UserSerializer, PermissionSerializer, GroupSerializer, 
     SMS_RecordsSerializers, PatientLoginSerializer, StaffLoginSerializer, UserSerializer as UserRestrictedSerializer, \
     TaskLoginSerializer,SocialMediaSerializer
 from .services import _parse_data, auth_login, auth_password_change, auth_register_user, user_clone_api, \
-    create_user_token,auth_register_doctor
+    create_user_token,auth_register_doctor,auth_register_patient
 from ..base import response
 from ..base.api.viewsets import ModelViewSet
 from ..constants import CONFIG, CONST_REPORT_MAIL
@@ -151,7 +151,7 @@ class userSignupView(ModelViewSet):
 
     @action(methods=['POST'], detail=False)
     def register(self, request):
-        data = auth_register_doctor(request)
+        data = auth_register_patient(request)
         return response.Created(data)
 
     @action(methods=['POST'], detail=True)

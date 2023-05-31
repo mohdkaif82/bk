@@ -13,7 +13,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, PersonalDoct
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, Country, City, State, PatientFile, Source, \
     PatientPrescriptions, PatientMembership, PatientAdvice, PatientInventory, GeneratedPdf, PatientProcedure, \
     PatientNotes, MedicalCertificate, PatientCallNotes, ColdCalling, PatientAllopathicMedicines, PatientRegistration, \
-    AdvisorBank
+    AdvisorBank,Service
 from ..practice.serializers import ProcedureCatalogSerializer, PracticeStaffSerializer, \
     PracticeStaffBasicSerializer, PracticeRefererSerializer, LabTestCatalogSerializer, MembershipSerializer, \
     PracticeBasicSerializer, RegistrationSerializer
@@ -55,6 +55,10 @@ class CitySerializer(ModelSerializer):
         model = City
         fields = '__all__'
 
+class ServiceSerializer(ModelSerializer):
+    class Meta:
+        model = Service
+        fields = '__all__'
 
 class PersonalDoctorsPracticeSerializer(ModelSerializer):
     class Meta:

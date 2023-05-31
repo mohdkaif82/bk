@@ -5,7 +5,6 @@ import os
 import random
 import string
 from datetime import timedelta, date, datetime
-
 import pandas as pd
 import xmltodict
 from ..accounts.models import User
@@ -29,8 +28,10 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, ReturnPaymen
     PatientMembership, PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, PatientFile, RequestOTP, \
     PatientPrescriptions, PatientInvoices, PatientPayment, Country, State, City, PatientProcedure, PatientNotes, \
     MedicalCertificate, PatientWallet, GeneratedPdf, PatientWalletLedger, Reservations, PatientCallNotes, \
-    PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank
+    PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank,\
+    Service
 from .permissions import PatientsPermissions
+from ..blog.permissions import BlogImagePermissions
 from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMedicalHistorySerializer, \
     PatientMembershipSerializer, PatientVitalSignsSerializer, PatientClinicNotesSerializer, PatientFileSerializer, \
     PatientClinicNotesDataSerializer, PatientCallNotesDetailSerializer, GeneratedPdfSerializer, ColdCallingSerializer, \
@@ -40,7 +41,8 @@ from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMed
     CountrySerializer, StateSerializer, CitySerializer, PatientsReferalSerializer, PatientMembershipReportSerializer, \
     SourceSerializer, PatientsFollowUpSerializer, PatientsPersonalDoctorsPracticeSerializer, PatientInventorySerializer, \
     PatientAllopathicMedicinesSerializer, PatientRegistrationSerializer, PatientRegistrationDataSerializer, \
-    AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer
+    AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer,\
+    PatientsDetailsSerializer,ServiceSerializer
 from .services import update_pratice_patient_details, update_patient_extra_details, generate_app_report, \
     update_patient_prescriptions, update_patient_procedure, generate_pdf, generate_timeline, common_function, mail_file, \
     create_update_record, get_advisor_sale
@@ -2347,7 +2349,8 @@ class DiseasesViewSet(ModelViewSet):
         if name:
             queryset=DiseaseList.objects.filter(name__icontains=name)
         return queryset
-    
+
+        
     def create(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "POST method is not allowed."})
     
@@ -2357,3 +2360,55 @@ class DiseasesViewSet(ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+    
+class PatientProfileViewSet(ModelViewSet):
+    serializer_class = PatientsDetailsSerializer
+    queryset = Patients.objects.all()
+    permission_classes = (PatientsPermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    def get_queryset(self):
+        queryset = super(PatientProfileViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+    
+    def list(self,request,*args,**kwargs):
+        return response.MethodNotAllowed({"detail": "This method is not allowed."})
+        
+    def create(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    # def update(self, request, *args, **kwargs):
+    #     return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+    
+class ServiceViewSet(ModelViewSet):
+    serializer_class = ServiceSerializer
+    queryset = Service.objects.all()
+    permission_classes = (BlogImagePermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    def get_queryset(self):
+        queryset = super(ServiceViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+        
+    # def create(self, request, *args, **kwargs):
+    #     return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    def update(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    

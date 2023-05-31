@@ -7,6 +7,7 @@ from .serializers import LoginSerializer as LoginRestrictedSerializer, \
 from ..base import response
 from ..practice.models import Practice, PracticeStaffRelation, PracticeStaff
 from ..practice.serializers import PracticeStaffRelationDataSerializer, PracticeBasicDataSerializer
+from ..patients.models import Patients
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login, authenticate
 from rest_framework.authtoken.models import Token
@@ -64,21 +65,28 @@ def auth_login(request):
                 return response.BadRequest({'detail': 'User account is disabled.'})
             token, created = Token.objects.get_or_create(user=user)
             login(request, user)
-            staff = PracticeStaff.objects.get(user=user, is_active=True, user__is_active=True)
-            if user.is_superuser:
-                practice_list = []
-                practices = PracticeBasicDataSerializer(Practice.objects.filter(is_active=True),
-                                                        many=True).data
-                for practice in practices:
-                    practice_list.append({"practice": practice, "staff": staff.pk})
+            staff = PracticeStaff.objects.filter(user=user, is_active=True, user__is_active=True).first()
+            if staff:
+                if user.is_superuser:
+                    practice_list = []
+                    practices = PracticeBasicDataSerializer(Practice.objects.filter(is_active=True),
+                                                            many=True).data
+                    for practice in practices:
+                        practice_list.append({"practice": practice, "staff": staff.pk})
+                else:
+                    practice_list = PracticeStaffRelationDataSerializer(
+                        PracticeStaffRelation.objects.filter(is_active=True, staff=staff), many=True).data
+                auth_data = {
+                    "token": token.key,
+                    "user": UserRestrictedSerializer(user, context={'request': request}).data,
+                    "practice_list": practice_list
+                }
             else:
-                practice_list = PracticeStaffRelationDataSerializer(
-                    PracticeStaffRelation.objects.filter(is_active=True, staff=staff), many=True).data
-            auth_data = {
-                "token": token.key,
-                "user": UserRestrictedSerializer(user, context={'request': request}).data,
-                "practice_list": practice_list
-            }
+                auth_data = {
+                    "token": token.key,
+                    "user": UserRestrictedSerializer(user, context={'request': request}).data,
+                }
+            
             create_user_token(user_token, device, application, user)
             return response.Ok(auth_data)
         else:
@@ -216,6 +224,55 @@ def auth_register_doctor(request):
         
     PracticeStaff.objects.get_or_create(user=user,department=data.get('department'),\
         designation=data.get('designation'))
+
+    return request.data
+
+
+def auth_register_patient(request):
+    """
+    params: request
+    return: user
+    """
+    UserModel = get_user_model()
+    # User details to create an user
+    data = parse_register_user_data(request.data)
+    print('data print kro',data)
+    password=data.get('password')
+    user_data = User(
+        email=data.get('email'),
+        password=data.get('password'),
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name'),
+        mobile=request.POST.get('mobile'),
+    )
+    print(user_data,'mobile',request.POST.get('mobile'))
+
+    user = None
+    # Check email is register as a active user
+    try:
+        user = get_user_model().objects.get(email=data.get('email'), is_active=True)
+    except get_user_model().DoesNotExist:
+        pass
+
+    # if user is not exist, create a Inactive user
+    if not user:
+        un_active_user = UserModel.objects.filter(email=user_data.email, is_active=False)
+        if un_active_user:
+            usr=UserModel.objects.filter(email=user_data.email, is_active=False).first()
+            Patients.objects.filter(user=usr).delete()
+            usr.delete()
+
+        user = UserModel.objects.create_user(**dict(user_data._asdict()))
+        print(user)
+        # user.set_password(password)
+        # user.save()
+
+    if user and data.get('referer_code') and UserModel.objects.filter(referer_code=data.get('referer_code')).exists():
+        user.referer = UserModel.objects.filter(referer_code=data.get('referer_code'))[0]
+        user.save()
+        
+    Patients.objects.get_or_create(user=user,\
+        )
 
     return request.data
 

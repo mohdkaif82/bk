@@ -51,6 +51,11 @@ class PersonalDoctorsPractice(models.Model):
     practice = models.ForeignKey(Practice, null=True, blank=True, on_delete=models.PROTECT)
     is_active = models.BooleanField(default=True)
 
+class Service(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='services/')
+    is_active = models.BooleanField(default=True)
 
 class Patients(TimeStampedModel):
     user = models.OneToOneField(User, blank=True, null=True, related_name="patients_user", on_delete=models.PROTECT)
