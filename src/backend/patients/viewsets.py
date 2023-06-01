@@ -2388,7 +2388,7 @@ class PatientProfileViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
     
-    
+from .crons import *
 class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
     queryset = Service.objects.all()
@@ -2400,6 +2400,7 @@ class ServiceViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super(ServiceViewSet, self).get_queryset()
         queryset = queryset.filter(is_active=True)
+        remind_appointment_tomorrow()
         return queryset
         
     # def create(self, request, *args, **kwargs):
@@ -2412,3 +2413,5 @@ class ServiceViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
     
+
+

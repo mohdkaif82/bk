@@ -219,16 +219,24 @@ if SERVER == "PRODUCTION":
 
     # Cron Jobs Settings
     CRONJOBS = [
-        ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
-        ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
-        ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
-        ('30 1 * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
-        ('30 1 * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
-        ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+        # ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
+        # ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
+        # ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
+        # ('30 1 * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
+        # ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings')
     ]
     
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)
-
+CRONJOBS = [
+        # ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
+        # ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
+        # ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
+        ('*/1 * * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
+        # ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+    ]
 # FCM Credentials
 if SERVER == "PRODUCTION":
     DOMAIN = ''

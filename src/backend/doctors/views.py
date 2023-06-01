@@ -134,8 +134,6 @@ class LiveDoctor(APIView):
         for session in sessions:
             data = session.get_decoded()
             uid_list.append(data.get('_auth_user_id', None))
-        # Query all logged in users based on id list
-        listdoc=[]
         livedoctor = PracticeStaff.objects.filter(user__in=uid_list)
         ser=PracticeStaffSerializer(livedoctor,many=True)
         return response.Ok({'live_doctor':ser.data})
