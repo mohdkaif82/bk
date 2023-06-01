@@ -49,28 +49,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserSerializer
 
-class SignupView(APIView):
-    def get(self, request):
-        users = User.objects.all()
-        return Response(users.values(), status=status.HTTP_200_OK)
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        referalcode=request.data.get('referalcode')
-
-        pa=request.data['password']
-        if serializer.is_valid():
-            # user = User.objects.create_user( password='password')
-            ser=serializer.save()
-            usr=User.objects.get(id=ser.id)
-            usr.set_password(pa)
-            if referalcode:
-                if User.objects.filter(referer_code=referalcode).exists():
-                    refid=User.objects.get(referer_code=referalcode)
-                    usr.referer=refid
-            usr.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class userSignupView(ModelViewSet):
     
     queryset = get_user_model().objects.all()
