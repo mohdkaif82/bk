@@ -2421,10 +2421,12 @@ class PatientManualReportViewSet(ModelViewSet):
     pagination_class = StandardResultsSetPagination
 
     
-    # def get_queryset(self):
-    #     queryset = super(PatientManualReportViewSet, self).get_queryset()
-    #     queryset = queryset.filter(is_active=True)
-    #     return queryset
+    def get_queryset(self):
+        queryset = super(PatientManualReportViewSet, self).get_queryset()
+        patient = self.request.query_params.get("patient", None)
+        if patient:
+            queryset = queryset.filter(patient=patient)
+        return queryset
         
     # def create(self, request, *args, **kwargs):
     #     return response.MethodNotAllowed({"detail": "POST method is not allowed."})

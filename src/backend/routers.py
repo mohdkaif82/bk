@@ -67,8 +67,8 @@ restricted_router.register(r'wallet_ledger', PatientWalletLedgerViewSet, basenam
 
 # Appointment App
 restricted_router.register(r'appointment', AppointmentViewSet, basename='v1_appointment')
-# restricted_router.register(r'opd', OpdViewSet, basename='v1_opd')
-# restricted_router.register(r'assign_opd', AssignOpdViewSet, basename='v1_opd')
+restricted_router.register(r'opd', OpdViewSet, basename='v1_opd')
+restricted_router.register(r'assign_opd', AssignOpdViewSet, basename='v1_opd')
 
 
 # BLOG API
