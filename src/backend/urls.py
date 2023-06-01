@@ -24,12 +24,15 @@ from backend.doctors.views import (
     WalletDetailAPIView,
    
 )
+from backend.practice.viewsets import DoctorSearchAPIView
+from rest_framework import routers
+router = routers.DefaultRouter()
 # from backend.accounts.viewsets import SignupView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('backend.doctors.urls')),
     path('wallet/balance-detail/<int:pk>', WalletDetailAPIView.as_view(), name='wallet-detail'),
-    
+    path('api/doctors/', DoctorSearchAPIView.as_view(), name='doctor_search'),
     path('erp-api/password_reset/', include('django_rest_passwordreset.urls')),
     path('erp-api/', include(restricted_router.urls)),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

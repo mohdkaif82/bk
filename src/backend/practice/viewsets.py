@@ -1532,3 +1532,21 @@ class NoticeBoardViewSet(ModelViewSet):
         queryset = super(NoticeBoardViewSet, self).get_queryset()
         queryset = queryset.filter(is_active=True)
         return queryset
+from rest_framework.views import APIView
+class DoctorSearchAPIView(APIView):
+    def get(self, request):
+        doctor = request.query_params.get('doctorname', None)
+        
+        # disease = request.query_params.get('doctor', None)
+        # queryset = PracticeStaff.objects.all()
+        
+        if doctor :
+            queryset = PracticeStaff.objects.filter(user__first_name__icontains=doctor)
+            
+        # elif practice:
+        #     queryset = queryset.filter(practice__name__icontains=practice)
+        # elif disease:
+        #     queryset = queryset.filter(doctor__emp_id__icontains=disease)
+
+        serializer = PracticeStaffSerializer(queryset, many=True)
+        return response.Ok(serializer.data)
