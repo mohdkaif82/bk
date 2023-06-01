@@ -16,16 +16,16 @@ from .mission_arogyam.viewsets import ArogyamPostViewSet, ArogyamVideoFileViewSe
 from .mlm.viewsets import ProductMarginViewSet, RoleComissionViewSet
 from .mlm_compensation.viewsets import PointsToBusinessAdvisorViewSet, ProductMarginAdvisorViewSet, RoleComissionAdvisorViewSet
 from .muster_roll.viewsets import HrSettingsViewSet, TasksViewSet
-from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet
+from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet,patients_video_ViewSet
 from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesViewSet, \
-    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet
+    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet, NoticeBoardViewSet
 
 from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlogViewSet,AppBlogCategoryViewSet,AppYoutubeCategoryViewSet,AppYoutubeViewSet
 
 restricted_router = PlutonicRouter()
-#userSignupView
 # Auth App
 restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
+#userSignupView pk
 
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
@@ -42,7 +42,10 @@ restricted_router.register(r'notification', PushNotificationViewSet, basename='v
 restricted_router.register(r'noticeboard', NoticeBoardViewSet, basename='v1_NoticeBoardViewSet')
 
 # Patient App
+
 restricted_router.register(r'patients', PatientViewSet, basename='v1_patient')
+# patients_video_ViewSet
+restricted_router.register(r'patient_testimonials_video', patients_video_ViewSet, basename='pk_patient')
 
 #AllopathToAyurvedaViewSet
 restricted_router.register(r'searchmedican', SearchMedicanViewSet, basename='v1_searchmedican')

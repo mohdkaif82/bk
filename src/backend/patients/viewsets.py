@@ -29,7 +29,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, ReturnPaymen
     PatientMembership, PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, PatientFile, RequestOTP, \
     PatientPrescriptions, PatientInvoices, PatientPayment, Country, State, City, PatientProcedure, PatientNotes, \
     MedicalCertificate, PatientWallet, GeneratedPdf, PatientWalletLedger, Reservations, PatientCallNotes, \
-    PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank
+    PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank,PatientTestimonials
 from .permissions import PatientsPermissions
 from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMedicalHistorySerializer, \
     PatientMembershipSerializer, PatientVitalSignsSerializer, PatientClinicNotesSerializer, PatientFileSerializer, \
@@ -40,7 +40,7 @@ from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMed
     CountrySerializer, StateSerializer, CitySerializer, PatientsReferalSerializer, PatientMembershipReportSerializer, \
     SourceSerializer, PatientsFollowUpSerializer, PatientsPersonalDoctorsPracticeSerializer, PatientInventorySerializer, \
     PatientAllopathicMedicinesSerializer, PatientRegistrationSerializer, PatientRegistrationDataSerializer, \
-    AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer
+    AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer,Patient_TestimonialsSerializers
 from .services import update_pratice_patient_details, update_patient_extra_details, generate_app_report, \
     update_patient_prescriptions, update_patient_procedure, generate_pdf, generate_timeline, common_function, mail_file, \
     create_update_record, get_advisor_sale
@@ -2357,3 +2357,35 @@ class DiseasesViewSet(ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+
+
+
+### patients create by pk
+class patients_video_ViewSet(ModelViewSet):
+
+    serializer_class = Patient_TestimonialsSerializers
+    queryset = PatientTestimonials.objects.all()
+    permission_classes = (PatientsPermissions,)
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_queryset(self):
+        queryset = super(patients_video_ViewSet, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        queryset = queryset.order_by('description')
+        return queryset.order_by('-id')
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.queryset.get(pk=kwargs.get('pk'))
+        if request.data.get('description') and request.data.get('description') != instance.rank:
+            try:
+                landing = Slider.objects.get(rank=request.data.get('description'))
+                landing.rank = instance.rank
+                landing.save()
+            except Exception as e:
+                print(e)
+
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Ok(serializer.data)

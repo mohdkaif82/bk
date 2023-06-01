@@ -1532,3 +1532,49 @@ class NoticeBoardViewSet(ModelViewSet):
         queryset = super(NoticeBoardViewSet, self).get_queryset()
         queryset = queryset.filter(is_active=True)
         return queryset
+
+
+################################################################
+#CREATE 
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from .models import Doctor
+# from .serializers import DoctorSerializer
+
+# class DoctorSearchAPIView(APIView):
+#     def get(self, request):
+#         name = request.query_params.get('name', None)
+#         disease = request.query_params.get('diseas', None)
+#         queryset = Doctor.objects.all()
+        
+#         if name and disease:
+#             queryset = queryset.filter(name__icontains=name)
+#         elif disease:
+#             queryset = queryset.filter(diseas__pratapname__icontains=disease)
+
+#         serializer = DoctorSerializer(queryset, many=True)
+#         return Response(serializer.data)
+    
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import DoctorSerializer
+
+class DoctorSearchAPIView(APIView):
+    def get(self, request):
+        doctor = request.query_params.get('doctorname', None)
+        
+        # disease = request.query_params.get('doctor', None)
+        # queryset = PracticeStaff.objects.all()
+        
+        if doctor :
+            queryset = PracticeStaff.objects.filter(user__first_name__icontains=doctor)
+            
+        # elif practice:
+        #     queryset = queryset.filter(practice__name__icontains=practice)
+        # elif disease:
+        #     queryset = queryset.filter(doctor__emp_id__icontains=disease)
+
+        serializer = PracticeStaffSerializer(queryset, many=True)
+        return response.Ok(serializer.data)

@@ -5,7 +5,10 @@ from .models import Practice, PracticeCalenderSettings, AppointmentCategory, Pra
     PushNotifications,Membership,Registration,EmailCommunications
 from django.contrib import admin
 
+from .models import Doctor, Disease
 
+admin.site.register(Doctor)
+admin.site.register(Disease)
 @admin.register(Practice)
 class PracticeAdmin(admin.ModelAdmin):
     model = Practice

@@ -49,15 +49,16 @@ class PracticeStaffBasicSerializer(ModelSerializer):
 
 class PracticeSerializer(ModelSerializer):
     doctor_data = serializers.SerializerMethodField()
-
+    default_doctor  =PracticeStaffBasicSerializer
     class Meta:
         model = Practice
+
         fields = (
             'id', 'name', 'tagline', 'specialisation', 'address', 'locality', 'country', 'city', 'state', 'pincode',
             'contact', 'email', 'website', 'gstin', 'logo', 'language', 'is_active', 'hide_cancelled_payment',
             'hide_cancelled_invoice', 'hide_cancelled_return', 'hide_cancelled_proforma', 'payment_prefix',
             'invoice_prefix', 'return_prefix', 'proforma_prefix', 'default_doctor', 'doctor_data', 'reg_city',
-            'reg_state', 'reg_country')
+            'reg_state', 'reg_country','default_doctor')
 
     def get_doctor_data(self, obj):
         return PracticeStaffBasicSerializer(obj.default_doctor).data
@@ -588,3 +589,16 @@ class PermissionGroupSerializer(ModelSerializer):
                 instance.permissions.add(permission)
         instance.save()
         return instance
+from .models import Doctor, Disease
+
+class DiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disease
+        fields = ('id', 'pratapname')
+
+class DoctorSerializer(serializers.ModelSerializer):
+    diseas = DiseaseSerializer()
+
+    class Meta:
+        model = Doctor
+        fields = ('id', 'name', 'specialty', 'diseas')

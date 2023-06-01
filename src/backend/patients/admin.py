@@ -4,9 +4,11 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, \
     PatientFile, PatientPrescriptions, PatientInvoices, PatientPayment, \
     PatientMembership, ProcedureCatalogInvoice,PatientWallet,AdvisorBank,PatientCallNotes,MedicalCertificate, \
         PatientNotes,PatientRegistration,Source,PatientProcedure,RequestOTP,PatientAdvice,\
-        PatientAllopathicMedicines
+        PatientAllopathicMedicines, PatientTestimonials
 
-
+@admin.register(PatientTestimonials)
+class PatientGroupsAdmin(admin.ModelAdmin):
+    model = PatientTestimonials
 @admin.register(PatientGroups)
 class PatientGroupsAdmin(admin.ModelAdmin):
     model = PatientGroups

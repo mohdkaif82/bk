@@ -586,3 +586,16 @@ class NoticeBoard(models.Model):
     
     
 
+class Disease(models.Model):
+    pratapname = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.namep
+
+class Doctor(models.Model):
+    name = models.CharField(max_length=100)
+    specialty = models.CharField(max_length=100)
+    diseas = models.ForeignKey(Disease, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

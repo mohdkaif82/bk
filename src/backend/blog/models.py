@@ -75,7 +75,7 @@ def create_tag_slug(tempslug):
 
 class BlogImage(TimeStampedModel):
     name = models.CharField(max_length=1000, blank=True, null=True)
-    image = models.FileField(upload_to=upload_blog_image, blank=True, null=True)
+    image = models.FileField(upload_to='upload_blog_image/', blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
     def image_path(self):
@@ -182,10 +182,10 @@ class PostHistory(models.Model):
 
 
 class Image_File(models.Model):
-    upload = models.FileField(upload_to=upload_blog_image, blank=True, null=True)
+    upload = models.FileField(upload_to='upload_blog_image/', blank=True, null=True)
     date_created = models.DateTimeField(default=datetime.datetime.now)
     is_image = models.BooleanField(default=True)
-    thumbnail = models.FileField(upload_to=upload_blog_image, blank=True, null=True)
+    thumbnail = models.FileField(upload_to='upload_blog_image/', blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -233,7 +233,7 @@ class Slider(TimeStampedModel):
     title = models.CharField(max_length=524, blank=True, null=True)
     name = models.CharField(max_length=256, blank=True, null=True)
     rank = models.PositiveSmallIntegerField(blank=True, null=True)
-    silder_image = models.CharField(max_length=3000, null=True, blank=True)
+    silder_image = models.FileField(upload_to='slider/image/')
     is_active = models.BooleanField(default=True)
 
 

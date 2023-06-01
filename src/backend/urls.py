@@ -24,9 +24,16 @@ from backend.doctors.views import (
     WalletDetailAPIView,
    
 )
+from backend.practice.viewsets import DoctorSearchAPIView
+from rest_framework import routers
+router = routers.DefaultRouter()
+# router.register(r'doctors', DoctorViewSet)
+
 # from backend.accounts.viewsets import SignupView
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('api/doctors/', DoctorSearchAPIView.as_view(), name='doctor_search'),
     path('',include('backend.doctors.urls')),
     path('wallet/balance-detail/<int:pk>', WalletDetailAPIView.as_view(), name='wallet-detail'),
     
