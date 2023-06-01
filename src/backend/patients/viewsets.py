@@ -29,7 +29,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, ReturnPaymen
     PatientPrescriptions, PatientInvoices, PatientPayment, Country, State, City, PatientProcedure, PatientNotes, \
     MedicalCertificate, PatientWallet, GeneratedPdf, PatientWalletLedger, Reservations, PatientCallNotes, \
     PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank,\
-    Service
+    Service,PatientManualReport
 from .permissions import PatientsPermissions
 from ..blog.permissions import BlogImagePermissions
 from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMedicalHistorySerializer, \
@@ -42,7 +42,7 @@ from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMed
     SourceSerializer, PatientsFollowUpSerializer, PatientsPersonalDoctorsPracticeSerializer, PatientInventorySerializer, \
     PatientAllopathicMedicinesSerializer, PatientRegistrationSerializer, PatientRegistrationDataSerializer, \
     AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer,\
-    PatientsDetailsSerializer,ServiceSerializer
+    PatientsDetailsSerializer,ServiceSerializer,PatientManualReportSerializer
 from .services import update_pratice_patient_details, update_patient_extra_details, generate_app_report, \
     update_patient_prescriptions, update_patient_procedure, generate_pdf, generate_timeline, common_function, mail_file, \
     create_update_record, get_advisor_sale
@@ -2388,7 +2388,6 @@ class PatientProfileViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
     
-from .crons import *
 class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
     queryset = Service.objects.all()
@@ -2400,7 +2399,6 @@ class ServiceViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super(ServiceViewSet, self).get_queryset()
         queryset = queryset.filter(is_active=True)
-        remind_appointment_tomorrow()
         return queryset
         
     # def create(self, request, *args, **kwargs):
@@ -2415,3 +2413,25 @@ class ServiceViewSet(ModelViewSet):
     
 
 
+class PatientManualReportViewSet(ModelViewSet):
+    serializer_class = PatientManualReportSerializer
+    queryset = PatientManualReport.objects.all()
+    permission_classes = (BlogImagePermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+
+    
+    # def get_queryset(self):
+    #     queryset = super(PatientManualReportViewSet, self).get_queryset()
+    #     queryset = queryset.filter(is_active=True)
+    #     return queryset
+        
+    # def create(self, request, *args, **kwargs):
+    #     return response.MethodNotAllowed({"detail": "POST method is not allowed."})
+    
+    # def update(self, request, *args, **kwargs):
+    #     return response.MethodNotAllowed({"detail": "PUT method is not allowed."})
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        return response.MethodNotAllowed({"detail": "Delete method is not allowed."})

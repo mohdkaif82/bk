@@ -617,3 +617,22 @@ class AdvisorBank(TimeStampedModel):
     bank_name = models.CharField(max_length=1024, blank=True, null=True)
     bank_branch = models.CharField(max_length=1024, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+
+
+class PatientManualReport(models.Model):
+    patient=models.ForeignKey(Patients, on_delete=models.PROTECT)
+    pulse=models.CharField(max_length=5)
+    temperature=models.CharField(max_length=20)
+    temperature_part=models.CharField(max_length=50)
+    blud_pressure_up=models.CharField(max_length=50)
+    blud_pressure_down=models.CharField(max_length=50)
+    position=models.CharField(max_length=50)
+    weight=models.CharField(max_length=50)
+    resp_rate=models.CharField(max_length=50)
+    creatinine_level=models.CharField(max_length=50)
+    haemoglobin_level=models.CharField(max_length=20)
+    urea_level=models.CharField(max_length=50)
+    uric_acid_level=models.CharField(max_length=50)
+    remark=models.CharField(max_length=500)
+    date = models.DateTimeField(auto_now_add=True)

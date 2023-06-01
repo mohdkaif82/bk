@@ -13,7 +13,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, PersonalDoct
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, Country, City, State, PatientFile, Source, \
     PatientPrescriptions, PatientMembership, PatientAdvice, PatientInventory, GeneratedPdf, PatientProcedure, \
     PatientNotes, MedicalCertificate, PatientCallNotes, ColdCalling, PatientAllopathicMedicines, PatientRegistration, \
-    AdvisorBank,Service
+    AdvisorBank,Service,PatientManualReport
 from ..practice.serializers import ProcedureCatalogSerializer, PracticeStaffSerializer, \
     PracticeStaffBasicSerializer, PracticeRefererSerializer, LabTestCatalogSerializer, MembershipSerializer, \
     PracticeBasicSerializer, RegistrationSerializer
@@ -625,3 +625,9 @@ class MedicalCertificateSerializer(ModelSerializer):
                 obj.excused_duty_from_session == "Morning" and obj.excused_duty_to_session == "Evening"):
             days += 1
         return days
+
+
+class PatientManualReportSerializer(ModelSerializer):
+    class Meta:
+        model = PatientManualReport
+        fields = '__all__'
