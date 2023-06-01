@@ -11,13 +11,14 @@ from django.db.models import Count
 
 def follow_up_and_medicine_reminder():
     date_today = timezone.now_local(True)
-    follow_up_reminder(date_today)
+    # follow_up_reminder(date_today)
     medicine_reminder(date_today)
     return
 
 
 def send_greetings():
     date_today = timezone.now_local(True)
+    # print('date:',date_today)
     patient_anniversary(date_today)
     patient_birthday(date_today)
     return
@@ -38,7 +39,7 @@ def remind_appointment_tomorrow():
 def appointment_reminder(date):
     all_appointments = Appointment.objects.filter(schedule_at__date=date, is_active=True)
     for appointment in all_appointments:
-        sms.prepare_appointment_sms(appointment, "REMINDER")
+        # sms.prepare_appointment_sms(appointment, "REMINDER")
         email.appointment_email(appointment, "REMINDER")
 
 
@@ -46,7 +47,7 @@ def follow_up_reminder(date):
     all_patients = Patients.objects.filter(follow_up_date=date, follow_up_sms_email=True, is_active=True)
     for patient in all_patients:
         appointment = Appointment.objects.filter(patient=patient, is_active=True).last()
-        sms.prepare_appointment_sms(appointment, "FOLLOWUP")
+        # sms.prepare_appointment_sms(appointment, "FOLLOWUP")
         email.appointment_email(appointment, "FOLLOWUP")
 
 
@@ -54,14 +55,14 @@ def medicine_reminder(date):
     all_patients = Patients.objects.filter(medicine_till=date, follow_up_sms_email=True, is_active=True)
     for patient in all_patients:
         appointment = Appointment.objects.filter(patient=patient, is_active=True).last()
-        sms.prepare_appointment_sms(appointment, "MEDICINE")
+        # sms.prepare_appointment_sms(appointment, "MEDICINE")
 
 
 def patient_anniversary(date):
     all_patients = Patients.objects.filter(anniversary__day=date.day, anniversary__month=date.month,
                                            birthday_sms_email=True, is_active=True)
     for patient in all_patients:
-        sms.prepare_greet_sms(patient, "ANNIVERSARY")
+        # sms.prepare_greet_sms(patient, "ANNIVERSARY")
         email.patient_greeting_email(patient, "ANNIVERSARY")
 
 
@@ -69,7 +70,7 @@ def patient_birthday(date):
     all_patients = Patients.objects.filter(dob__day=date.day, dob__month=date.month, birthday_sms_email=True,
                                            is_active=True)
     for patient in all_patients:
-        sms.prepare_greet_sms(patient, "BIRTHDAY")
+        # sms.prepare_greet_sms(patient, "BIRTHDAY")
         email.patient_greeting_email(patient, "BIRTHDAY")
 
 

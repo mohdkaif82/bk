@@ -6,6 +6,16 @@ from rest_framework.response import Response
 from .wallet import deposit_to_wallet, withdraw_from_wallet, get_transaction_history
 from .serializers import WalletSerializer 
 from rest_framework.response import Response
+
+from django.http import JsonResponse
+from rest_framework.views import APIView
+
+from django.contrib.sessions.models import Session
+from ..practice.models import PracticeStaff
+from ..practice.serializers import PracticeStaffSerializer
+from django.utils import timezone
+from ..base import response
+from ..accounts.models import User
 class WalletDetailAPIView(generics.RetrieveAPIView):
     queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
@@ -113,3 +123,21 @@ def apply_promo_code(request):
         return Response({'applied_discount': applied_discount}, status=200)
     except PromoCode.DoesNotExist:
         return Response({'detail': 'Invalid promo code'}, status=400)
+
+
+
+class LiveDoctor(APIView):
+    def get(self, request, *args, **kwargs):
+        sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        uid_list = []
+        # Build a list of user ids from that query
+        for session in sessions:
+            data = session.get_decoded()
+            uid_list.append(data.get('_auth_user_id', None))
+        livedoctor = PracticeStaff.objects.filter(user__in=uid_list)
+        ser=PracticeStaffSerializer(livedoctor,many=True)
+        return response.Ok({'live_doctor':ser.data})
+    
+    
+    
+

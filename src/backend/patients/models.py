@@ -74,6 +74,11 @@ class PersonalDoctorsPractice(models.Model):
     )
     is_active = models.BooleanField(default=True)
 
+class Service(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='services/')
+    is_active = models.BooleanField(default=True)
 
 class Patients(TimeStampedModel):
     user = models.OneToOneField(

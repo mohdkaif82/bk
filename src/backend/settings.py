@@ -130,12 +130,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # DATABASES = {'default': dj_database_url.config(default=config('DB_URabase_uL'))}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -219,16 +219,24 @@ if SERVER == "PRODUCTION":
 
     # Cron Jobs Settings
     CRONJOBS = [
-        ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
-        ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
-        ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
-        ('30 1 * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
-        ('30 1 * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
-        ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+        # ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
+        # ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
+        # ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
+        # ('30 1 * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
+        # ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings')
     ]
     
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)
-
+CRONJOBS = [
+        # ('0 2 * * *', 'backend.patients.crons.remind_appointment_today', '>> /tmp/appointment_reminder.log'),
+        # ('30 6 * * *', 'backend.patients.crons.remind_appointment_tomorrow', '>> /tmp/appointment_reminder.log'),
+        # ('30 1 * * *', 'backend.patients.crons.appointment_summary', '>> /tmp/scheduled_appointment_summary.log'),
+        ('*/1 * * * *', 'backend.patients.crons.follow_up_and_medicine_reminder', '>> /tmp/follow_up_medicine.log'),
+        # ('*/1 * * * *', 'backend.patients.crons.send_greetings', '>> /tmp/wish_sms.log'),
+        # ('*/5 * * * *', 'backend.accounts.crons.update_referer', '>> /tmp/update_referer.log'),
+    ]
 # FCM Credentials
 if SERVER == "PRODUCTION":
     DOMAIN = ''

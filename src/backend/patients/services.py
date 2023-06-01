@@ -588,3 +588,5 @@ def mail_file(patient_name, mail_to, pdf_obj, practice, report_name):
         return {"error": False, "detail": "Mail Sent Successfully"}
     else:
         return {"error": True, "detail": "Failed to generate mail document"}
+
+

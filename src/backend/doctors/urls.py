@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import path
 from . import views
-from .views import promo_code_list, offer_list, generate_promo_code, apply_promo_code
+from .views import promo_code_list, offer_list, generate_promo_code, apply_promo_code,LiveDoctor
 
 urlpatterns = [
     # # Deposit endpoint
@@ -28,6 +28,7 @@ urlpatterns = [
     path('withdraw/', views.withdraw, name='api_withdraw'),
     path('history/', views.transaction_history, name='api_history'),
     path('api/promo-codes/', promo_code_list, name='promo-code-list'),
+    path('livedoctor/',LiveDoctor.as_view(),name='livedoctor'),
     path('api/offers/', offer_list, name='offer-list'),
     path('api/generate-promo-code/', generate_promo_code, name='generate-promo-code'),
     path('api/apply-promo-code/', apply_promo_code, name='apply-promo-code'),
