@@ -30,6 +30,7 @@ router = routers.DefaultRouter()
 # from backend.accounts.viewsets import SignupView
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('chat/',include('backend.chat.urls')), 
     path('',include('backend.doctors.urls')),
     path('wallet/balance-detail/<int:pk>', WalletDetailAPIView.as_view(), name='wallet-detail'),
     path('api/doctors/', DoctorSearchAPIView.as_view(), name='doctor_search'),

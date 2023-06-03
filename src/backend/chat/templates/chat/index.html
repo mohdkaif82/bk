@@ -1,0 +1,385 @@
+
+
+
+<html>
+
+
+<head>
+
+
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css"
+  rel="stylesheet"
+/>
+
+<style type="text/css">
+  
+  .gradient-custom {
+/* fallback for old browsers */
+background: #fccb90;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to bottom right, rgba(252, 203, 144, 1), rgba(213, 126, 235, 1));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to bottom right, rgba(252, 203, 144, 1), rgba(213, 126, 235, 1))
+}
+
+.mask-custom {
+background: rgba(24, 24, 16, .2);
+border-radius: 2em;
+backdrop-filter: blur(15px);
+border: 2px solid rgba(255, 255, 255, 0.05);
+background-clip: padding-box;
+box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+.first_name{
+
+  color:red;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      <!-- Avatar -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="navbarDropdownMenuLink"
+          role="button"
+          data-mdb-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
+            class="rounded-circle"
+            height="22"
+            alt="Portrait of a Woman"
+            loading="lazy"
+          />
+          {{ request.user }}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <li>
+             <span class="dropdown-item logout">Logout</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
+
+<div class="row border rounded-5" style="height: 100%;width:100%;">
+
+<section  class="px-4 py-5 gradient-custom w-100" style="border-radius: .5rem .5rem 0 0;">
+  <div class="container py-5">
+
+    <div class="row">
+
+     <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0">
+
+        <h5 class="font-weight-bold mb-3 text-center text-white"> aaaaaaaaa Live Member</h5>
+
+        <div class="card mask-custom">
+          <div class="card-body">
+<h1>sss{{users}}</h1>
+            <ul class="list-unstyled mb-0 active_users">
+                  
+               {% for active_user in users %}
+                
+                  <li class="p-2 border-bottom active_user" data-id="{{active_user.id}}" style="border-bottom: 1px solid rgba(255,255,255,.3) !important;">
+                    <a href="#" class="d-flex justify-content-between link-light">
+                      <div class="d-flex flex-row">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"
+                          class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
+                        <div class="pt-1">
+                          <p class="fw-bold mb-0">{{ active_user.first_name }}</p>
+                          <p class="small text-muted">{{ active_user.text }}</p>
+                        </div>
+                      </div>
+                      <div class="pt-1">
+                        <p class="small text-muted mb-1">{{ active_user.datetime }}</p>
+                        
+                      </div>
+                    </a>
+                  </li>
+               
+
+              {% endfor %} 
+            
+             
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <div class="col-md-6 col-lg-7 col-xl-7">
+
+     
+        <ul class="list-unstyled text-messages text-white" style="border-radius:3px;height:450px;overflow: scroll;">
+          <!-- receier code -->
+          <!-- <li class="d-flex justify-content-between mb-4">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+              class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between p-3">
+                <p class="fw-bold mb-0">Brad Pitt</p>
+                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
+              </div>
+              <div class="card-body">
+                <p class="mb-0">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua.
+                </p>
+              </div>
+            </div>
+          </li>
+
+          
+          <li class="d-flex justify-content-between mb-4">
+            <div class="card w-100">
+              <div class="card-header d-flex justify-content-between p-3">
+                <p class="fw-bold mb-0">Lara Croft</p>
+                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
+              </div>
+              <div class="card-body">
+                <p class="mb-0">
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                  laudantium.
+                </p>
+              </div>
+            </div>
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+              class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+          </li> -->
+          
+
+
+        </ul>
+        
+     
+
+        <ul class="list-unstyled send-messages text-white">
+          <li class="mb-3">
+            <div class="form-outline form-white">
+              <textarea class="form-control" id="textAreaExample2" rows="4"></textarea>
+              <label class="form-label" for="textAreaExample2">Message</label>
+            </div>
+          </li>
+          <button type="button"  id="submit" class="btn btn-info btn-rounded float-end">Send</button>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+{{ room|json_script:"room" }}
+{{ user_id|json_script:"user_id" }}
+{{ user_name|json_script:"user_name" }}
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"
+></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+
+
+
+<script>
+
+        const roomName = JSON.parse(document.getElementById('room').textContent);
+        const user_id = JSON.parse(document.getElementById('user_id').textContent);
+        const user_name = JSON.parse(document.getElementById('user_name').textContent);
+        
+
+          {% comment %} console.log(user_id,"mmmmmmmmmmmmmmmmmmmm..."); {% endcomment %}
+      function connect(){
+
+        if(user_id!=null){
+          let chatSocket = new WebSocket(
+              'ws://'
+              + window.location.host
+              + '/ws/chat/'
+              + roomName
+              + '/'+user_id+'/'
+              {% comment %} console.log(user_id,"mmmmmmmmmmmmmmmmmmmm..."); {% endcomment %}
+          );
+          console.log(user_id,"mmmmmmmmmmmmmmmmmmmm...");
+
+          chatSocket.onopen = function(argument) {
+                
+          }
+
+          chatSocket.onmessage = function(e) {
+              const data = JSON.parse(e.data);
+              console.log(data);
+              {% comment %} console.log(user_id,"mmmmmmmmmmmmmmmmmmmm..."); {% endcomment %}
+              if(data.type == 'total_user'){
+                  $('.active_users').empty();
+                  for(var i=0;i<data.message.length;i++){
+                    if(data.message[i].id!=user_id){
+
+                    
+                  $('.active_users').append('<li class="p-2 border-bottom active_user" data-id="'+data.message[i].id+'" style="border-bottom: 1px solid rgba(255,255,255,.3) !important;"><a href="#" class="d-flex justify-content-between link-light"><div class="d-flex flex-row"><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60"><div class="pt-1"><p class="fw-bold mb-0 first_name_'+data.message[i].id+'" >'+data.message[i].first_name+'</p><p class="small text-muted">{{ active_user.text }}</p></div> </div><div class="pt-1"><p class="small text-muted mb-1">{{ active_user.datetime }}</p></div></a></li>');
+                }
+              }
+            }
+
+            if(data.type == 'chat_message')
+            {
+                if(data.to == user_id)
+                {
+
+
+                
+                  $('.text-messages').append('<li class="d-flex justify-content-between mb-4" ><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"><div class="card mask-custom" style="width:85%;"> <div class="card-header d-flex justify-content-between p-3" style="border-bottom: 1px solid rgba(255,255,255,.3);"><p class="fw-bold mb-0">'+data.sender+'</p><p class="text-light small mb-0"><i class="far fa-clock"></i>'+data.datetime+'</p></div><div class="card-body"><p class="mb-0">'+data.message+'</p></div></div></li><br/>');
+                }
+                else if(data.from == user_id)
+                {
+                
+                  // $('.text-messages').append('<li class="d-flex justify-content-between mb-4" ><div class="card mask-custom" style="width:85%;"> <div class="card-header d-flex justify-content-between p-3" style="border-bottom: 1px solid rgba(255,255,255,.3);"><p class="fw-bold mb-0">'+data.sender+'</p><p class="text-light small mb-0"><i class="far fa-clock"></i>'+data.datetime+'</p></div><div class="card-body"><p class="mb-0">'+data.message+'</p></div></div><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"></li><br/>');
+                }
+
+                  // $(".text-messages").append('<li class="d-flex justify-content-between mb-4"><div class="card w-30">'+'<div class="card-header d-flex justify-content-between p-3"><p class="fw-bold mb-0">'+data.sender+'</p><p class="text-muted small mb-0"><i class="far fa-clock"></i>'+data.datetime+'</p></div><div class="card-body"><p class="mb-0">'+data.message+'</p></div></div><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar" class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60"></li>');
+                     
+              }
+            
+            //document.querySelector('#chat-log').value += (data.message + '\n');
+          };
+
+          chatSocket.onclose = function(e) {
+              console.error('Chat socket closed unexpectedly');
+              // setTimeout(function() {
+              //   connect();
+              // }, 1000);
+          };
+
+
+        document.querySelector('#textAreaExample2').focus();
+        document.querySelector('#textAreaExample2').onkeyup = function(e) {
+            if (e.keyCode === 13) 
+            {  
+                //document.querySelector('#submit').click();
+            }
+        };
+
+        document.querySelector('#submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#textAreaExample2');
+            const message = messageInputDom.value;
+
+            if(localStorage.getItem("to") === null) {
+                  alert("please select to which you want to send message");
+                  return;
+            }
+            var to = localStorage.getItem("to");
+
+
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'type':'text',
+                'to': to,
+                'from': (user_id).toString()
+            }));
+            messageInputDom.value = '';
+
+            $('.text-messages').append('<li class="d-flex justify-content-between mb-4" ><div class="card mask-custom" style="width:85%;"> <div class="card-header d-flex justify-content-between p-3" style="border-bottom: 1px solid rgba(255,255,255,.3);"><p class="fw-bold mb-0">'+user_name+'</p><p class="text-light small mb-0"><i class="far fa-clock"></i>'+new Date().toLocaleString()+'</p></div><div class="card-body"><p class="mb-0">'+message+'</p></div></div><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"></li><br/>');
+        };
+
+        $('.logout').click(function(){
+          console.log("sending #logout command");
+            chatSocket.send(JSON.stringify({
+                'message': 'logout#',
+                'type':'text',
+                'from': (user_id).toString()
+            }));
+
+            $.get("logout_user/"+$id, function(data){
+                window.location.href="http://localhost:8000"
+            });
+
+        });
+      }
+    }
+
+      connect();
+
+</script>
+
+
+<script type="text/javascript">
+
+  $(document).on('click', 'ul li.active_user', function() {
+         $('.text-messages ').empty();
+        // when click on active user show chat summary 
+         //$('.active_user').css('background-color','none')
+         $("p").removeClass("first_name");
+          $id = $(this).attr("data-id");
+          $(".first_name_"+$id).addClass('first_name');
+          localStorage.setItem("to",$id);
+          $.get("get_messages/"+$id, function(data){
+              if(data.length==0){
+                $(".text-messages").append('<li class="d-flex justify-content-between mb-4">No Texts to Show </li>');
+              }
+              else{
+                $(".text-messages").empty();
+                console.log("total message between users "+data.length)
+                for(var i=0;i<data.length;i++){
+
+                  if(data[i].sender_id!=$id){
+                    // $(".text-messages").append('<li class="d-flex justify-content-between mb-4" style="float:right;width:250px;"><div class="card w-100" style="height:70px;"><div class="d-flex justify-content-between p-3"><p class="fw-bold mb-0"><b>'+data[i].sender+'</b></p><p class="text-muted small mb-0"><i class="far fa-clock" ></i>'+data[i].datetime+'</p><p class="">'+data[i].msg+'</p></div></div></li>');
+
+                    // $(".text-messages").append('<div class="d-flex flex-row justify-content-start" style="float:right;"><p style="width: 45px; height: 100%;"> </p><div><p class="small" style="float:left" ><b>Raju</b></p><p class="small p-2 ms-3 mb-1 rounded-3 flex-row justify-content-start" style="background-color: #f5f6f7;">Lorem ipsum dolor magna aliqua.</p><p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p></div></div><br/>');
+
+                    $('.text-messages').append('<li class="d-flex justify-content-between mb-4" ><div class="card mask-custom" style="width:85%;"> <div class="card-header d-flex justify-content-between p-3" style="border-bottom: 1px solid rgba(255,255,255,.3);"><p class="fw-bold mb-0">'+data[i].sender+'</p><p class="text-light small mb-0"><i class="far fa-clock"></i>'+data[i].datetime+'</p></div><div class="card-body"><p class="mb-0">'+data[i].msg+'</p></div></div><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"></li><br/>');
+
+
+
+
+               
+              
+                  }
+                  else{
+                      $('.text-messages').append('<li class="d-flex justify-content-between mb-4"><img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar" class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"><div class="card mask-custom" style="width:85%;"> <div class="card-header d-flex justify-content-between p-3" style="border-bottom: 1px solid rgba(255,255,255,.3);"><p class="fw-bold mb-0">'+data[i].sender+'</p><p class="text-light small mb-0"><i class="far fa-clock"></i>'+data[i].datetime+'</p></div><div class="card-body"><p class="mb-0">'+data[i].msg+'</p></div></div></li><br/>');
+
+
+                    // $('.text-messages').append(' <li class="d-flex justify-content-between mb-4"><div class="card w-30">'+'<div class="card-header d-flex justify-content-between p-3"><p class="fw-bold mb-0">'+data[i].sender+'</p><p class="text-muted small mb-0"><i class="far fa-clock"></i>'+data[i].datetime+'</p></div><div class="card-body"><p class="mb-0">'+data[i].msg+'</p></div></div></li>')
+
+
+                    // $(".text-messages").append('<div class="d-flex flex-row justify-content-start" style="float:left;"><p style="width: 45px; height: 100%;"> </p><div><p class="small" style="float:left" ><b>Raju</b></p><p class="small p-2 ms-3 mb-1 rounded-3 flex-row justify-content-start" style="background-color: #f5f6f7;">Lorem ipsum dolor magna aliqua.</p><p class="small ms-3 mb-3 rounded-3 text-muted float-end">12:00 PM | Aug 13</p></div></div><br/>');
+                  }
+                }
+              }
+          })
+
+    });
+
+</script>

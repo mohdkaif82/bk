@@ -53,6 +53,7 @@ LIBS = (
     'corsheaders',
     'django_rest_passwordreset',
     'pyfcm',
+    'channels',
 )
 
 APPS = (
@@ -71,6 +72,8 @@ APPS = (
     'backend.mission_arogyam',
     'backend.android_user',
     'backend.mlm_compensation',
+    'backend.chat',
+
     
 )
 
@@ -127,15 +130,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+# WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.asgi.application'
+
 
 #DATABASES = {'default': dj_database_url.config(default=config('DB_URabase_uL'))}
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -309,3 +314,12 @@ logging.config.dictConfig({
         },
     },
 })
+import redis
+REDIS_DEFAULT_CONNECTION_POOL = redis.ConnectionPool.from_url(os.getenv('REDIS_URL', 'redis://localhost:6379/'))
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+

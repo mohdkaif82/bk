@@ -1538,7 +1538,7 @@ class DoctorSearchAPIView(APIView):
         doctor = request.query_params.get('doctorname', None)
         
         # disease = request.query_params.get('doctor', None)
-        # queryset = PracticeStaff.objects.all()
+        queryset = PracticeStaff.objects.all()
         
         if doctor :
             queryset = PracticeStaff.objects.filter(user__first_name__icontains=doctor)

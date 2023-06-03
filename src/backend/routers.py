@@ -27,14 +27,14 @@ from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlo
 
 restricted_router = PlutonicRouter()
 #userSignupView
-# Auth App
-# restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
+# Auth App /userSignupView
+restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
 
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
 restricted_router.register(r'doctor_auth',DoctorViewSet, basename='v1_doctor_view_set')
-# restricted_router.register(r'socialmedia',SocialMediaViewSet, basename='v1_socialmedia_view_set')
+restricted_router.register(r'socialmedia',SocialMediaViewSet, basename='v1_socialmedia_view_set')
 
 
 # Practice App
