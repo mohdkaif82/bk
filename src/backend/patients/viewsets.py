@@ -29,7 +29,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, ReturnPaymen
     PatientPrescriptions, PatientInvoices, PatientPayment, Country, State, City, PatientProcedure, PatientNotes, \
     MedicalCertificate, PatientWallet, GeneratedPdf, PatientWalletLedger, Reservations, PatientCallNotes, \
     PersonalDoctorsPractice, ColdCalling, PatientAllopathicMedicines, PatientRegistration, AdvisorBank,\
-    Service,PatientManualReport
+    Service,PatientManualReport,PatientAddFile
 from .permissions import PatientsPermissions
 from ..blog.permissions import BlogImagePermissions
 from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMedicalHistorySerializer, \
@@ -42,7 +42,7 @@ from .serializers import PatientsSerializer, PatientGroupsSerializer, PatientMed
     SourceSerializer, PatientsFollowUpSerializer, PatientsPersonalDoctorsPracticeSerializer, PatientInventorySerializer, \
     PatientAllopathicMedicinesSerializer, PatientRegistrationSerializer, PatientRegistrationDataSerializer, \
     AdvisorBankSerializer, AdvisorBankDataSerializer, PatientRegistrationReportSerializer,\
-    PatientsDetailsSerializer,ServiceSerializer,PatientManualReportSerializer
+    PatientsDetailsSerializer,ServiceSerializer,PatientManualReportSerializer,PatientAddFileSerializer
 from .services import update_pratice_patient_details, update_patient_extra_details, generate_app_report, \
     update_patient_prescriptions, update_patient_procedure, generate_pdf, generate_timeline, common_function, mail_file, \
     create_update_record, get_advisor_sale
@@ -2437,3 +2437,37 @@ class PatientManualReportViewSet(ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         return response.MethodNotAllowed({"detail": "Delete method is not allowed."})
+    
+    
+
+
+class PatientAddFileViewSet(ModelViewSet):
+    queryset = PatientAddFile.objects.all()
+    serializer_class = PatientAddFileSerializer
+    permission_classes = (BlogImagePermissions,)
+    parser_classes = (JSONParser, XMLParser, MultiPartParser)
+    pagination_class = StandardResultsSetPagination
+    def get_queryset(self):
+        queryset = super(PatientAddFileViewSet, self).get_queryset()
+        patient = self.request.query_params.get("patient", None)
+        print(patient)
+        if patient:
+            queryset = queryset.filter(patient=patient)
+        return queryset
+    
+    
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     print(request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     print('seris valid....................')
+    #     files = request.FILES.getlist('files')  # Get the list of uploaded files
+        
+    #     # Save each file and associate it with the Document object
+    #     for file in files:
+    #         document = PatientAddFile()
+    #         document.file = file
+    #         document.save()
+        
+    #     headers = self.get_success_headers(serializer.data)
+    #     return response.Ok(serializer.data,  headers=headers)

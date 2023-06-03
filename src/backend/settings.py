@@ -74,6 +74,7 @@ APPS = (
     'backend.mlm_compensation',
     'backend.chat',
 
+    'backend.ecommers',
     
 )
 
@@ -135,12 +136,12 @@ ASGI_APPLICATION = 'backend.asgi.application'
 
 
 #DATABASES = {'default': dj_database_url.config(default=config('DB_URabase_uL'))}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -276,6 +277,11 @@ PASSWORD_RESET_TIME = 24 * 60 * 60
 RAZORPAY_ID ='rzp_test_48Z9LMTDVAN5JU'
 RAZORPAY_SECRET = 'gMxfhwgZ73ANYJQCeblLMy7W'
 
+
+
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440
 # Logger Settings
 import logging.config
 
