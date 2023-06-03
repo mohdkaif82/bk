@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from .routers import restricted_router
+from .routers import restricted_router,product_router,cart_router
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
@@ -32,5 +32,8 @@ urlpatterns = [
     
     path('erp-api/password_reset/', include('django_rest_passwordreset.urls')),
     path('erp-api/', include(restricted_router.urls)),
+    path('erp-api/', include(product_router.urls)),
+    path('erp-api/', include(cart_router.urls)),
+    
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

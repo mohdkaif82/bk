@@ -71,6 +71,7 @@ APPS = (
     'backend.mission_arogyam',
     'backend.android_user',
     'backend.mlm_compensation',
+    'backend.ecommers',
     
 )
 
@@ -271,6 +272,11 @@ PASSWORD_RESET_TIME = 24 * 60 * 60
 RAZORPAY_ID ='rzp_test_48Z9LMTDVAN5JU'
 RAZORPAY_SECRET = 'gMxfhwgZ73ANYJQCeblLMy7W'
 
+
+
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440
 # Logger Settings
 import logging.config
 

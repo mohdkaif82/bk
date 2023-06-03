@@ -19,23 +19,35 @@ from .mlm.viewsets import ProductMarginViewSet, RoleComissionViewSet
 from .mlm_compensation.viewsets import PointsToBusinessAdvisorViewSet, ProductMarginAdvisorViewSet, RoleComissionAdvisorViewSet
 from .muster_roll.viewsets import HrSettingsViewSet, TasksViewSet
 from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet,\
-    PatientProfileViewSet,ServiceViewSet,PatientManualReportViewSet
+    PatientProfileViewSet,ServiceViewSet,PatientManualReportViewSet,PatientAddFileViewSet
 from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesViewSet, \
     VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet
-
+from .ecommers.views import ProductsViewSet,CategoryViewSet,CartViewSet,ReviewViewSet,\
+    CartItemViewSet,OrderViewSet
 from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlogViewSet,AppBlogCategoryViewSet,AppYoutubeCategoryViewSet,AppYoutubeViewSet
-
+from rest_framework_nested import routers
 restricted_router = PlutonicRouter()
 #userSignupView
 # Auth App
-# restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
-
+restricted_router.register(r'users_signup', userSignupView, basename='v1_auth')
 restricted_router.register(r'users', UserViewSet, basename='v1_auth')
 restricted_router.register(r'patient_login', PatientLoginViewSet, basename='v1_patient_login')
 restricted_router.register(r'staff_login', StaffLoginViewSet, basename='v1_staff_login')
 restricted_router.register(r'doctor_auth',DoctorViewSet, basename='v1_doctor_view_set')
-# restricted_router.register(r'socialmedia',SocialMediaViewSet, basename='v1_socialmedia_view_set')
+restricted_router.register(r'socialmedia',SocialMediaViewSet, basename='v1_socialmedia_view_set')
 
+#ecommerce App
+
+restricted_router.register(r"ecommers/products", ProductsViewSet)
+restricted_router.register(r"ecommers/categories", CategoryViewSet)
+restricted_router.register(r"ecommers/carts", CartViewSet)
+restricted_router.register(r"ecommers/orders", OrderViewSet, basename="orders")
+product_router = routers.NestedDefaultRouter(restricted_router, r"ecommers/products", lookup="product")
+product_router.register("reviews", ReviewViewSet, basename="product-reviews")
+
+
+cart_router = routers.NestedDefaultRouter(restricted_router, r"ecommers/carts", lookup="cart")
+cart_router.register("items", CartItemViewSet, basename="cart-items")
 
 # Practice App
 restricted_router.register(r'clinics', PracticeViewSet, basename='v1_practice')
@@ -49,6 +61,7 @@ restricted_router.register(r'patients', PatientViewSet, basename='v1_patient')
 restricted_router.register(r'patientsprofile', PatientProfileViewSet, basename='v1_patientprofile')
 restricted_router.register(r'service',ServiceViewSet, basename='v1_service')
 restricted_router.register(r'PatientManualReport',PatientManualReportViewSet, basename='v1_PatientManualReport')
+restricted_router.register(r'patientaddfile',PatientAddFileViewSet, basename='v1_patientaddfile')
 
 #AllopathToAyurvedaViewSet
 restricted_router.register(r'searchmedican', SearchMedicanViewSet, basename='v1_searchmedican')

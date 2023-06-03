@@ -636,3 +636,14 @@ class PatientManualReport(models.Model):
     uric_acid_level=models.CharField(max_length=50,blank=True, null=True)
     remark=models.CharField(max_length=500,blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
+    
+    
+class PatientAddFile(models.Model):
+    patient=models.ForeignKey(Patients, on_delete=models.PROTECT)
+    tags=models.CharField(max_length=10)
+    file = models.FileField(upload_to='patient/documents/',default="", null=True, blank=True)
+    
+class ProDocFile(models.Model):
+    patientadd = models.ForeignKey(PatientAddFile, on_delete=models.CASCADE, related_name = "files")
+    file = models.FileField(upload_to="patient/documents/", default="", null=True, blank=True)
+    

@@ -13,7 +13,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, PersonalDoct
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, Country, City, State, PatientFile, Source, \
     PatientPrescriptions, PatientMembership, PatientAdvice, PatientInventory, GeneratedPdf, PatientProcedure, \
     PatientNotes, MedicalCertificate, PatientCallNotes, ColdCalling, PatientAllopathicMedicines, PatientRegistration, \
-    AdvisorBank,Service,PatientManualReport
+    AdvisorBank,Service,PatientManualReport,PatientAddFile,ProDocFile
 from ..practice.serializers import ProcedureCatalogSerializer, PracticeStaffSerializer, \
     PracticeStaffBasicSerializer, PracticeRefererSerializer, LabTestCatalogSerializer, MembershipSerializer, \
     PracticeBasicSerializer, RegistrationSerializer
@@ -631,3 +631,54 @@ class PatientManualReportSerializer(ModelSerializer):
     class Meta:
         model = PatientManualReport
         fields = '__all__'
+        
+# class PatientAddFileSerializer(serializers.ModelSerializer):
+#     file = serializers.ListField(child=serializers.FileField(), required=False, allow_empty=True)
+
+#     class Meta:
+#         model = PatientAddFile
+#         fields = '__all__'
+    
+#     def get_file_url(self, obj):
+#         request = self.context.get('request')
+#         if obj.file and request is not None:
+#             return request.build_absolute_uri(obj.file.url)
+#         return None
+        
+#     def create(self, validated_data):
+#         files = validated_data.pop('file', []) 
+#         print('files',files)    # Get the list of uploaded files
+        
+#         document = PatientAddFile.objects.create(**validated_data)
+
+#         # Save each file and associate it with the Document object
+#         for file in files:
+#             document.file = file
+#             document.save()
+        
+#         return document
+    
+
+class PatientFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProDocFile
+        fields = ["id", "patientadd", "file"]
+        
+        
+class PatientAddFileSerializer(serializers.ModelSerializer):
+    files = PatientFileSerializer(many=True, read_only=True)
+    uploaded_files = serializers.ListField(
+        child = serializers.FileField(max_length = 1000000, allow_empty_file = False, use_url = False),
+        write_only=True)
+    
+    class Meta:
+        model = PatientAddFile
+        fields ="__all__"
+    
+    
+    def create(self, validated_data):
+        uploaded_files = validated_data.pop("uploaded_files")
+        product = PatientAddFile.objects.create(**validated_data)
+        for image in uploaded_files:
+            newproduct_image = ProDocFile.objects.create(patientadd=product, file=image)
+        return product
