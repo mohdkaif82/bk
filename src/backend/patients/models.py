@@ -647,3 +647,8 @@ class ProDocFile(models.Model):
     patientadd = models.ForeignKey(PatientAddFile, on_delete=models.CASCADE, related_name = "files")
     file = models.FileField(upload_to="patient/documents/", default="", null=True, blank=True)
     
+
+class Review(models.Model):
+    patient = models.ForeignKey(Patients, on_delete=models.PROTECT,null=True, blank=True)
+    review_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

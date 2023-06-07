@@ -11,7 +11,8 @@ from .models import Practice, PracticeCalenderSettings, MedicineBookingPackage, 
     PracticeVitalSign, Communications, EmailCommunications, LabPanel, LabTestCatalog, DrugCatalog, ExpenseType, \
     Expenses, Vendor, ActivityLog, PracticeUserPermissions, DrugType, DrugUnit, PracticePrintSettings, \
     PracticeStaffRelation, PrescriptionTemplate, Advice, DrugCatalogTemplate, RoomTypeSettings, BedBookingPackage, \
-    Medication, PushNotifications, Permissions, PermissionGroup, Registration,NoticeBoard
+    Medication, PushNotifications, Permissions, PermissionGroup, Registration,NoticeBoard,Policy,TrainingVideoCategory,\
+    TrainingVideo
 
 
 class MembershipSerializer(ModelSerializer):
@@ -588,3 +589,18 @@ class PermissionGroupSerializer(ModelSerializer):
                 instance.permissions.add(permission)
         instance.save()
         return instance
+    
+class PolicySerializer(ModelSerializer):
+    class Meta:
+        model = Policy
+        fields = '__all__'
+        
+class TrainingVideoCategorySerializer(ModelSerializer):
+    class Meta:
+        model = TrainingVideoCategory
+        fields = '__all__'
+        
+class TrainingVideoSerializer(ModelSerializer):
+    class Meta:
+        model = TrainingVideo
+        fields = '__all__'

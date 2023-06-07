@@ -19,9 +19,11 @@ from .mlm.viewsets import ProductMarginViewSet, RoleComissionViewSet
 from .mlm_compensation.viewsets import PointsToBusinessAdvisorViewSet, ProductMarginAdvisorViewSet, RoleComissionAdvisorViewSet
 from .muster_roll.viewsets import HrSettingsViewSet, TasksViewSet
 from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet,\
-    PatientProfileViewSet,ServiceViewSet,PatientManualReportViewSet,PatientAddFileViewSet
+    PatientProfileViewSet,ServiceViewSet,PatientManualReportViewSet,PatientAddFileViewSet,\
+    PatientReviewViewSet
 from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesViewSet, \
-    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet
+    VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet,\
+    PolicyViewSet,TrainingVideoCategoryViewSet,TrainingVideoViewSet
 from .ecommers.views import ProductsViewSet,CategoryViewSet,CartViewSet,ReviewViewSet,\
     CartItemViewSet,OrderViewSet
 from .android_user.viewsets import AppSliderViewSet,AppTestimonialViewSet,AppBlogViewSet,AppBlogCategoryViewSet,AppYoutubeCategoryViewSet,AppYoutubeViewSet
@@ -55,6 +57,9 @@ restricted_router.register(r'staff', PracticeStaffViewSet, basename='v1_staff')
 restricted_router.register(r'activity', ActivityLogViewSet, basename='v1_activity')
 restricted_router.register(r'notification', PushNotificationViewSet, basename='v1_notification')
 restricted_router.register(r'noticeboard', NoticeBoardViewSet, basename='v1_NoticeBoardViewSet')
+restricted_router.register(r'policy', PolicyViewSet, basename='v1_policyviewset')
+restricted_router.register(r'trainingvideocategory', TrainingVideoCategoryViewSet, basename='v1_trainingvideocategory')
+restricted_router.register(r'trainingvideo', TrainingVideoViewSet, basename='v1_trainingvideoviewset')
 
 # Patient App
 restricted_router.register(r'patients', PatientViewSet, basename='v1_patient')
@@ -62,6 +67,7 @@ restricted_router.register(r'patientsprofile', PatientProfileViewSet, basename='
 restricted_router.register(r'service',ServiceViewSet, basename='v1_service')
 restricted_router.register(r'PatientManualReport',PatientManualReportViewSet, basename='v1_PatientManualReport')
 restricted_router.register(r'patientaddfile',PatientAddFileViewSet, basename='v1_patientaddfile')
+restricted_router.register(r'patientreviewViewSet',PatientReviewViewSet, basename='v1_patient_review')
 
 #AllopathToAyurvedaViewSet
 restricted_router.register(r'searchmedican', SearchMedicanViewSet, basename='v1_searchmedican')
@@ -160,4 +166,6 @@ restricted_router.register(r'app-yotube-category', AppYoutubeCategoryViewSet, ba
 
 
 #Doctor app 
-# restricted_router.register(r'signup',DoctorViewSet, basename='v1_doctor_view_set')
+restricted_router.register(r'signup',DoctorViewSet, basename='v1_doctor_view_set')
+
+

@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import login, authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from ..doctors.wallet import deposit_to_wallet
 
 User = namedtuple('User', ['email', 'password', 'first_name', 'last_name','mobile'])
 
@@ -175,7 +176,9 @@ def auth_register_user(request):
         user = UserModel.objects.create_user(**dict(user_data._asdict()))
 
     if user and request.POST.get('referer_code') and UserModel.objects.filter(referer_code=request.POST.get('referer_code')).exists():
-        user.referer = UserModel.objects.filter(referer_code=request.POST.get('referer_code'))[0]
+        refer_by=UserModel.objects.filter(referer_code=request.POST.get('referer_code'))[0]
+        user.referer = refer_by
+        deposit_to_wallet(refer_by, amount=50)
         user.save()
 
     return request.data
@@ -219,8 +222,10 @@ def auth_register_doctor(request):
         # user.save()
 
     if user and data.get('referer_code') and User.objects.filter(referer_code=data.get('referer_code')).exists():
-        user.referer = User.objects.filter(referer_code=data.get('referer_code'))[0]
+        refer_by=User.objects.filter(referer_code=data.get('referer_code'))[0]
+        user.referer = refer_by
         user.save()
+        deposit_to_wallet(refer_by, amount=50)
         
     PracticeStaff.objects.get_or_create(user=user,department=data.get('department'),\
         designation=data.get('designation'))
@@ -264,13 +269,15 @@ def auth_register_patient(request):
 
         user = UserModel.objects.create_user(**dict(user_data._asdict()))
         print(user)
+        
         # user.set_password(password)
         # user.save()
 
     if user and data.get('referer_code') and UserModel.objects.filter(referer_code=data.get('referer_code')).exists():
-        user.referer = UserModel.objects.filter(referer_code=data.get('referer_code'))[0]
+        refer_by=UserModel.objects.filter(referer_code=data.get('referer_code'))[0]
+        user.referer = refer_by
         user.save()
-        
+        deposit_to_wallet(refer_by, amount=50)
     Patients.objects.get_or_create(user=user,\
         )
 

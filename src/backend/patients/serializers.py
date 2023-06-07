@@ -13,7 +13,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, PersonalDoct
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, Country, City, State, PatientFile, Source, \
     PatientPrescriptions, PatientMembership, PatientAdvice, PatientInventory, GeneratedPdf, PatientProcedure, \
     PatientNotes, MedicalCertificate, PatientCallNotes, ColdCalling, PatientAllopathicMedicines, PatientRegistration, \
-    AdvisorBank,Service,PatientManualReport,PatientAddFile,ProDocFile
+    AdvisorBank,Service,PatientManualReport,PatientAddFile,ProDocFile,Review
 from ..practice.serializers import ProcedureCatalogSerializer, PracticeStaffSerializer, \
     PracticeStaffBasicSerializer, PracticeRefererSerializer, LabTestCatalogSerializer, MembershipSerializer, \
     PracticeBasicSerializer, RegistrationSerializer
@@ -632,31 +632,31 @@ class PatientManualReportSerializer(ModelSerializer):
         model = PatientManualReport
         fields = '__all__'
         
-# class PatientAddFileSerializer(serializers.ModelSerializer):
-#     file = serializers.ListField(child=serializers.FileField(), required=False, allow_empty=True)
+class PatientAddFileSerializer(serializers.ModelSerializer):
+    file = serializers.ListField(child=serializers.FileField(), required=False, allow_empty=True)
 
-#     class Meta:
-#         model = PatientAddFile
-#         fields = '__all__'
+    class Meta:
+        model = PatientAddFile
+        fields = '__all__'
     
-#     def get_file_url(self, obj):
-#         request = self.context.get('request')
-#         if obj.file and request is not None:
-#             return request.build_absolute_uri(obj.file.url)
-#         return None
+    def get_file_url(self, obj):
+        request = self.context.get('request')
+        if obj.file and request is not None:
+            return request.build_absolute_uri(obj.file.url)
+        return None
         
-#     def create(self, validated_data):
-#         files = validated_data.pop('file', []) 
-#         print('files',files)    # Get the list of uploaded files
+    def create(self, validated_data):
+        files = validated_data.pop('file', []) 
+        print('files',files)    # Get the list of uploaded files
         
-#         document = PatientAddFile.objects.create(**validated_data)
+        document = PatientAddFile.objects.create(**validated_data)
 
-#         # Save each file and associate it with the Document object
-#         for file in files:
-#             document.file = file
-#             document.save()
+        # Save each file and associate it with the Document object
+        for file in files:
+            document.file = file
+            document.save()
         
-#         return document
+        return document
     
 
 class PatientFileSerializer(serializers.ModelSerializer):
@@ -682,3 +682,21 @@ class PatientAddFileSerializer(serializers.ModelSerializer):
         for image in uploaded_files:
             newproduct_image = ProDocFile.objects.create(patientadd=product, file=image)
         return product
+    
+    
+class ReviewSerializer(ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        patient=Patients.objects.filter(user=request.user)
+        if patient.exists():
+            patient=patient.first()
+            validated_data["patient"]=patient
+            obj=Review.objects.create(**validated_data)
+            return obj
+        else:
+            raise serializers.ValidationError({"detail": "You are not allowed to make a review"})
+        

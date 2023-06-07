@@ -170,6 +170,7 @@ class PracticeUserPermissionsPermissions(ResourcePermission):
     list_perms = IsAuthenticated()
     permissions_perms = IsAuthenticated()
     bulk_perms = IsAuthenticated()
+    Informational_perms = IsAuthenticated()
 
 
 class PracticePrintSettingsPermissions(ResourcePermission):

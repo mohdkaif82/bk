@@ -80,3 +80,4 @@ class SocialMediaPermissions(ResourcePermission):
     verify_otp_perms = AllowAny()
     resend_otp_perms = AllowAny()
     switch_perms = IsAuthenticated()
+    get_refercode_perms = IsAuthenticated()

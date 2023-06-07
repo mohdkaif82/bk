@@ -19,7 +19,7 @@ from .models import Practice, PracticeCalenderSettings, ProcedureCatalog, Taxes,
     DrugCatalog, ExpenseType, AppointmentCategory, Vendor, Expenses, ActivityLog, DrugType, DrugUnit, \
     PracticeUserPermissions, PracticePrintSettings, PrescriptionTemplate, RoomTypeSettings, VisitingTime, Membership, \
     PracticeVitalSign, PracticeStaffRelation, MedicineBookingPackage, BedBookingPackage, OtherDiseases, Medication, \
-    PushNotifications, PermissionGroup,NoticeBoard
+    PushNotifications, PermissionGroup,NoticeBoard,Policy,TrainingVideoCategory,TrainingVideo
 from .permissions import PracticePermissions as PracticeClientPermissions, PracticeStaffPermissions, \
     VendorPermissions, ExpensesPermissions, ActivityLogPermissions, DrugTypePermissions, DrugUnitPermissions, \
     PracticeUserPermissionsPermissions
@@ -36,7 +36,8 @@ from .serializers import PracticeSerializer, PracticeCalenderSettingsSerializer,
     PracticeStaffRelationDataSerializer, MedicineBookingPackageSerializer, BedBookingPackageSerializer, \
     BedBookingPackageDataSerializer, MedicineBookingPackageDataSerializer, OtherDiseasesSerializer, \
     MedicationSerializer, PushNotificationSerializer, PushNotificationSaveSerializer, RegistrationSerializer, \
-    PermissionGroupSerializer,NoticeBoardSerializer
+    PermissionGroupSerializer,NoticeBoardSerializer,PolicySerializer,TrainingVideoCategorySerializer,\
+    TrainingVideoSerializer
 from .services import update_pratice_related_object, get_appoinment_report, seat_availability, \
     update_pratice_related_calender_object, update_pratice_related_drug_object, update_prescription_template, \
     payment_capture, get_emr_report, dict_to_mail
@@ -1550,4 +1551,25 @@ class DoctorSearchAPIView(APIView):
         #     queryset = queryset.filter(doctor__emp_id__icontains=disease)
 
         serializer = PracticeStaffSerializer(queryset, many=True)
+        return response.Ok(serializer.data)
+    
+class PolicyViewSet(ModelViewSet):
+    serializer_class = PolicySerializer
+    queryset = Policy.objects.all()
+    permission_classes = (PracticeUserPermissionsPermissions,)
+    
+class TrainingVideoCategoryViewSet(ModelViewSet):
+    serializer_class = TrainingVideoCategorySerializer
+    queryset = TrainingVideoCategory.objects.all()
+    permission_classes = (PracticeUserPermissionsPermissions,)    
+    
+class TrainingVideoViewSet(ModelViewSet):
+    serializer_class = TrainingVideoSerializer
+    queryset = TrainingVideo.objects.all()
+    permission_classes = (PracticeUserPermissionsPermissions,)
+    
+    @action(methods=['GET'], detail=False)
+    def Informational(self, request, *args, **kwargs):
+        queryset = TrainingVideo.objects.all()[:4]
+        serializer = TrainingVideoSerializer(queryset, many=True)
         return response.Ok(serializer.data)

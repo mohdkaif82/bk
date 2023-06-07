@@ -3,12 +3,21 @@ from ..base.models import TimeStampedModel
 from ..mlm.models import ProductMargin
 from django.db import models
 
+
 ACTIVITY_OPTIONS = (
     ('Added', 'Added'),
     ('Modified', 'Modified'),
     ('Deleted', 'Deleted')
 )
 
+class Policy(models.Model):
+    title=models.CharField(max_length=255)
+    content=models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    author  = models.ForeignKey(User, on_delete=models.PROTECT,null=True,blank=True)
+    is_active = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=True)
 
 class PracticeStaff(TimeStampedModel):
     user = models.ForeignKey(User, blank=True, null=True, related_name="practice_staff_user", on_delete=models.PROTECT)
@@ -23,6 +32,7 @@ class PracticeStaff(TimeStampedModel):
     activate_login = models.BooleanField(default=False)
     update_timing_online = models.BooleanField(default=True)
     is_manager = models.BooleanField(default=False)
+    policy=models.ManyToManyField('Policy',null=True,blank=True)
     designation = models.ForeignKey("muster_roll.HrSettings", blank=True, related_name="designation", null=True,
                                     on_delete=models.PROTECT)
     department = models.ForeignKey("muster_roll.HrSettings", blank=True, related_name="department", null=True,
@@ -31,6 +41,15 @@ class PracticeStaff(TimeStampedModel):
     advisors = models.ManyToManyField("patients.Patients", blank=True)
     is_active = models.BooleanField(default=True)
 
+class TrainingVideoCategory(models.Model):
+    name=models.CharField(max_length=255)
+    description=models.TextField()
+    
+class TrainingVideo(models.Model):
+    name=models.CharField(max_length=255)
+    categories=models.ForeignKey(TrainingVideoCategory,on_delete=models.PROTECT)
+    video=models.FileField(upload_to='TrainingVideo/%y/%m/', blank=True, null=True)
+    link=models.CharField(max_length=500, blank=True, null=True)
 
 class Practice(TimeStampedModel):
     name = models.CharField(max_length=1024, null=True, blank=True)

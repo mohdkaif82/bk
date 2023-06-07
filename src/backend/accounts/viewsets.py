@@ -901,3 +901,21 @@ class SocialMediaViewSet(ModelViewSet):
             return response.Ok(serializer.data)
         content = {'detail': 'You are not allowed to perform this action'}
         return response.BadRequest(content)
+    
+    @action(methods=['GET'], detail=False)
+    def get_refercode(self, request):
+        result={}
+        result['refercode']=request.user.referer_code
+        return response.Ok(result)
+            
+
+# the task for 7 Jun 2023
+# project name : BK AROGYAM
+# patient panel:
+# make get my refer code functionality 
+# make the curd functionality of review and add permission (only patients can give reviews)
+# doctor panel:
+# make the  curd functionality of Important Policies 
+# make the  curd functionality of Training Videos and Testing 
+# make video in slider
+# make get my refer code functionality 
