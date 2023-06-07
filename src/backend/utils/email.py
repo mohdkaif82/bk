@@ -69,6 +69,7 @@ def send(to, subject, html_body, text_body=None, attachments=[], from_email=None
 def send_from_template(to, subject, template, context, **kwargs):
     # print template
     html_body = render_to_string(template, context)
+    print("html body: " + html_body)
     return send(to, subject, html_body, **kwargs)
 
 
@@ -148,3 +149,28 @@ def order_placed_email(sale_obj):
     Thread(target=send_from_template, args=(mail_list, email_subject, email_template, context)).start()
     Thread(target=send_from_template, args=(patient_mail, email_subject, email_template, context)).start()
     return
+
+
+def video_email(obj):
+    mail_list=''
+    email_subject=''
+    print('pass1')
+    if obj.status == "Waiting":
+        mail_list=obj.doctors_call.user.email
+        print('mail_list',mail_list)
+        email_subject=f"patient {obj.patients_call.user} schedule a meeting with you."
+    elif obj.status == "Cancelled":
+        mail_list=obj.patients_call.user.email
+        print('mail_list',mail_list)
+        email_subject=f"doctor {obj.doctors_call.user.first_name} cancelled a meeting with you."
+    elif obj.status == "ReScheduled":
+        mail_list=obj.patients_call.user.email
+        print('mail_list',mail_list)
+        email_subject=f"doctor {obj.doctors_call.user.first_name} ReScheduled a meeting with you."
+    elif obj.status == "Scheduled":
+        mail_list=obj.patients_call.user.email
+        print('mail_list',mail_list)
+        email_subject=f"doctor {obj.doctors_call.user.first_name} accepted a meeting with you."
+    email_template = "videocall_email/video_email.html"
+    context = {'data': obj, 'base_url': settings.DOMAIN + settings.MEDIA_URL, 'prefix': CONST_ORDER_PREFIX}
+    Thread(target=send_from_template, args=(mail_list, email_subject, email_template, context)).start()

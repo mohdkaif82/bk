@@ -1532,6 +1532,7 @@ class NoticeBoardViewSet(ModelViewSet):
         queryset = super(NoticeBoardViewSet, self).get_queryset()
         queryset = queryset.filter(is_active=True)
         return queryset
+    
 from rest_framework.views import APIView
 class DoctorSearchAPIView(APIView):
     def get(self, request):

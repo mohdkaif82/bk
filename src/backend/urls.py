@@ -20,6 +20,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.views.static import serve
+from .meeting.viewsets import lobby,room,getToken,getMember,createMember,deleteMember
 from backend.doctors.views import (
     WalletDetailAPIView,
    
@@ -38,6 +39,13 @@ urlpatterns = [
     path('erp-api/', include(restricted_router.urls)),
     path('erp-api/', include(product_router.urls)),
     path('erp-api/', include(cart_router.urls)),
-    
+    # url for video calling
+    path('video_call/<str:id>/', lobby),
+    path('room/', room),
+    path('get_token/', getToken),
+
+    path('create_member/', createMember),
+    path('get_member/', getMember),
+    path('delete_member/', deleteMember),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,4 @@
-from .models import Meeting, MeetingChat, MeetingJoinee
+from .models import Meeting, MeetingChat, MeetingJoinee,RoomMember,VideoCall
 from django.contrib import admin
 
 
@@ -11,6 +11,15 @@ class MeetingAdmin(admin.ModelAdmin):
 class MeetingJoinee(admin.ModelAdmin):
     pass
 
+
+@admin.register(VideoCall)
+class VideoCall(admin.ModelAdmin):
+    pass
+
+
+@admin.register(RoomMember)
+class RoomMember(admin.ModelAdmin):
+    pass
 
 @admin.register(MeetingChat)
 class MeetingChat(admin.ModelAdmin):

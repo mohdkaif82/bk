@@ -22,9 +22,16 @@ class ActiveUser(models.Model):
 		return self.user.count()
 
 	def get_queryset_of_active_user(self,exclude_user=None):
+		print("running")
 		if exclude_user:
+			print("exclude_user")
 			return [{'email':user.email,'id':user.id} for user in self.user.all() if user.id!=exclude_user.id ]
 		return [ user for user in self.user.all().values('email','id') ]
+    	# print("runnnn method called")
+    	# if exclude_user:
+		# 	print("exclude_user method called")
+		# 	return [{'email':user.email,'id':user.id} for user in self.user.all() if user.id!=exclude_user.id ]
+		# return [ user for user in self.user.all().values('email','id') ]
 
 
 

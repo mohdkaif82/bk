@@ -6,7 +6,13 @@ from .models import Patients
 from ..practice.models import PracticeStaff, PracticeStaffRelation
 from ..practice.services import send_notification
 from ..utils import timezone, sms, email
+from ..meeting.models import VideoCall
 from django.db.models import Count
+from django.db.models import Q
+from ..constants import CONST_PRACTICE_DATA, CONST_ORDER_PREFIX
+
+from django.conf import settings
+from threading import Thread
 
 
 def follow_up_and_medicine_reminder():
@@ -113,3 +119,18 @@ def appointment_summary():
             title = "Today's Summary"
             send_notification(staff.user, notify_practice, CONST_STAFF, title, sms_data, "Calendar")
     return 
+
+
+def call_reminder():
+    date_today = timezone.now_local(False)      
+    target_time = date_today + timezone.timedelta(minutes=5)  
+    obj=VideoCall.objects.filter(Q(start__gt=date_today) & Q(start__lte=target_time))
+    email_subject = "Call Reminder - BK Arogyam & Research Pvt. Ltd."
+    email_template = "videocall_email/video_call_reminder.html"
+    for i in obj:
+        context = {'data': i, 'base_url': settings.DOMAIN + settings.MEDIA_URL, 'prefix': CONST_ORDER_PREFIX}
+        Thread(target=email.send_from_template, args=(i.patients_call.user.email, email_subject, email_template, context)).start()
+        context = {'data': i, 'doctor':True,'base_url': settings.DOMAIN + settings.MEDIA_URL, 'prefix': CONST_ORDER_PREFIX}
+        Thread(target=email.send_from_template, args=(i.doctors_call.user.email, email_subject, email_template, context)).start()
+    
+    

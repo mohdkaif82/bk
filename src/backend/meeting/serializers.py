@@ -4,10 +4,11 @@ import string
 
 import pandas as pd
 from ..base.serializers import ModelSerializer, serializers
-from .models import Meeting, MeetingJoinee, MeetingChat
+from .models import Meeting, MeetingJoinee, MeetingChat,VideoCall
 from ..patients.serializers import PatientsBasicDataSerializer
 from ..practice.serializers import PracticeStaffBasicSerializer
-
+from ..patients.models import Patients
+from ..utils.email import video_email
 
 class MeetingDetailsSerializer(ModelSerializer):
     patients = PatientsBasicDataSerializer(required=False, many=True)
@@ -99,4 +100,57 @@ class MeetingChatDataSerializer(ModelSerializer):
     class Meta:
         model = MeetingChat
         fields = '__all__'
+        
+        
+from ..utils import timezone
+class VideoCallSerializer(ModelSerializer):
+    # patients_call=serializers.SerializerMethodField(required=False)
+    class Meta:
+        model = VideoCall
+        fields = '__all__'
+        
+    
+    def create(self, validated_data):
+        validated_data["call_id"] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        request = self.context.get('request')
+        patient=Patients.objects.filter(user=request.user)
+        if patient.exists():
+            patient=patient.first()
+            validated_data["patients_call"]=patient
+            validated_data["is_active"]=True
+            obj=VideoCall.objects.create(**validated_data)
+            video_email(obj)
+            print('send')
+            return obj
+        else:
+            raise serializers.ValidationError({"detail": "You are not allowed to make a call"})
+    
+    def update(self,instance, validated_data):
+        instance = VideoCall.objects.get(id=instance.pk)
+        request = self.context.get('request')
+        if validated_data["status"]=='Scheduled':
+            instance.status="Scheduled"
+            instance.is_active=True
+            instance.cancel_by=''
+            instance.cancel_reason=''
+            
 
+        elif validated_data["status"]=='Cancelled':
+            instance.status="Cancelled"
+            instance.cancel_by=request.user.email
+            instance.cancel_reason=validated_data["cancel_reason"]
+            # instance.is_active=False
+            
+        elif validated_data["status"]=="ReScheduled":
+            instance.status="ReScheduled"
+            instance.is_active=True
+            instance.cancel_by=''
+            instance.cancel_reason=''
+            instance.start=validated_data['start']
+            
+        obj=instance.save()
+        video_email(obj=VideoCall.objects.get(id=instance.pk))
+        return instance
+        
+            
+    

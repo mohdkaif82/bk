@@ -15,7 +15,6 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
-        print(self.user_id,"kkkkkkkkkkkkkkkkkkkkkkkk")
         self.room_group_name = "chat_%s" % self.room_name
 
         async_to_sync(self.channel_layer.group_add)(
@@ -25,6 +24,7 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
         self.r=Room.objects.get(name=self.room_name)
         self.ac = ActiveUser.objects.get(room= self.r)
+        print('active user', self.ac)
         incoming_user = User.objects.get(id=self.user_id)
 
         # for adding incoming user in active_user of room

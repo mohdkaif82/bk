@@ -5,14 +5,23 @@ import pandas as pd
 from ..base import response
 from ..base.api.pagination import StandardResultsSetPagination
 from ..base.api.viewsets import ModelViewSet
-from .models import Meeting, MeetingJoinee, MeetingChat
+from .models import Meeting, MeetingJoinee, MeetingChat,VideoCall
 from .permissions import MeetingPermissions
 from .serializers import MeetingSerializer, MeetingDetailsSerializer, MeetingJoineeDataSerializer, \
-    MeetingJoineeSerializer, MeetingChatSerializer, MeetingChatDataSerializer
+    MeetingJoineeSerializer, MeetingChatSerializer, MeetingChatDataSerializer,VideoCallSerializer
 from ..utils import timezone
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, JSONParser
-
+from django.shortcuts import render
+from django.http import JsonResponse
+import random
+import time
+from agora_token_builder import RtcTokenBuilder
+from .models import RoomMember
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from ..patients.models import Patients
 
 class MeetingViewSet(ModelViewSet):
     serializer_class = MeetingSerializer
@@ -139,3 +148,89 @@ class MeetingViewSet(ModelViewSet):
             return response.Ok(
                 MeetingChatSerializer(update_response).data) if update_response else response.BadRequest(
                 {'detail': 'Send id with data'})
+
+# @login_required('')
+def lobby(request,id):
+    # if request.user.is_authenticated():
+    meeting= VideoCall.objects.filter(call_id=id,is_active=True)
+    if meeting.exists():
+        meeting=meeting.first()
+        print("Meeting",meeting)
+        print('doctor',meeting.doctors_call.user.email) 
+        doctor=False
+        if not Patients.objects.filter(user=request.user).exists():
+            doctor=True
+        return render(request, 'base/lobby.html',{'meeting':meeting,'doctor':doctor})
+    else:
+        return response.BadRequest('Meeting not found')
+    # return response.BadRequest('Please login first')
+    
+
+def room(request):
+    return render(request, 'base/room.html')
+
+class VideoCallView(ModelViewSet):
+    serializer_class = VideoCallSerializer
+    queryset = VideoCall.objects.all()
+    permission_classes = (MeetingPermissions,)
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_queryset(self):
+        queryset = super(VideoCallView, self).get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+        
+def getToken(request):
+    appId = "7a9556cdfd984af3805fe3fb809ebf80"
+    appCertificate = "2b2e6e0135254a55974113443b39c9b5"
+    channelName = request.GET.get('channel')
+    duration=request.GET.get('duration')
+    uid = random.randint(1, 230)
+    expirationTimeInSeconds = int(duration)*60
+    currentTimeStamp = int(time.time())
+    privilegeExpiredTs = currentTimeStamp + expirationTimeInSeconds
+    role = 1
+
+    token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+
+    return JsonResponse({'token': token, 'uid': uid}, safe=False)
+
+
+@csrf_exempt
+def createMember(request):
+    data = json.loads(request.body)
+    member, created = RoomMember.objects.get_or_create(
+        name=data['name'],
+        uid=data['UID'],
+        room_name=data['room_name']
+    )
+
+    return JsonResponse({'name':data['name']}, safe=False)
+
+
+def getMember(request):
+    uid = request.GET.get('UID')
+    room_name = request.GET.get('room_name')
+
+    member = RoomMember.objects.get(
+        uid=uid,
+        room_name=room_name,
+    )
+    name = member.name
+    return JsonResponse({'name':member.name}, safe=False)
+
+@csrf_exempt
+def deleteMember(request):
+    data = json.loads(request.body)
+    member = RoomMember.objects.get(
+        name=data['name'],
+        uid=data['UID'],
+        room_name=data['room_name']
+    )
+    member.delete()
+    return JsonResponse('Member deleted', safe=False)

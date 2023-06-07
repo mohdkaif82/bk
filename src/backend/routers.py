@@ -11,7 +11,7 @@ from .blog.viewsets import PostViewSet, VideoFileViewSet, DiseaseViewSet, Events
     BlogImageViewSet, ContactUsFormViewSet, DynamicDataViewSet, CareersViewSet
 from .inventory.viewsets import ManufacturerViewSet, PracticeInventoryViewSet, InventoryItemViewSet, \
     StockEntryItemViewSet, ItemTypeStockViewSet
-from .meeting.viewsets import MeetingViewSet
+from .meeting.viewsets import MeetingViewSet,VideoCallView
 from .mission_arogyam.viewsets import ArogyamPostViewSet, ArogyamVideoFileViewSet, ArogyamDiseaseViewSet, \
     ArogyamEventsViewSet, ArogyamContactUsViewSet, ArogyamPageSEOViewSet, ArogyamSliderViewSet, ArogyamCommentViewSet, \
     ArogyamRatingViewSet, ArogyamContactUsFormViewSet, ArogyamSuggestionBoxViewSet
@@ -142,6 +142,8 @@ restricted_router.register(r'points_to_business',PointsToBusinessAdvisorViewSet,
 
 # Meeting API
 restricted_router.register(r'meetings', MeetingViewSet, basename='v1_meetings')
+
+restricted_router.register(r'videocall', VideoCallView, basename='v1_videocall')
 
 # HR API
 restricted_router.register(r'hr-settings', HrSettingsViewSet, basename='v1_hr_settings')
