@@ -27,6 +27,8 @@ from backend.doctors.views import (
 )
 from backend.practice.viewsets import DoctorSearchAPIView
 from rest_framework import routers
+
+from django.conf.urls.i18n import i18n_patterns
 router = routers.DefaultRouter()
 # from backend.accounts.viewsets import SignupView
 urlpatterns = [
@@ -49,3 +51,6 @@ urlpatterns = [
     path('delete_member/', deleteMember),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+urlpatterns += i18n_patterns(
+    path('erp-api/', include(restricted_router.urls)),
+)

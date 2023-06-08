@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-08 13:30+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: backend/accounts/models.py:88
+msgid "code"
+msgstr ""
+
+#: backend/accounts/serializers.py:154
+msgid "Password should have minimum 6 characters."
+msgstr ""
+
+#: backend/accounts/viewsets.py:909
+msgid "Your Text"
+msgstr "Metniniz"
+
+#: backend/accounts/viewsets.py:910
+msgid "hello user"
+msgstr "merhaba kullanıcı"
+
+#: backend/accounts/viewsets.py:911
+msgid "prepare"
+msgstr "hazırlanmak"
+
+#: backend/base/api/validators.py:8
+msgid "Please enter a valid Name."
+msgstr ""
+
+#: backend/base/api/validators.py:17 backend/base/api/validators.py:18
+msgid "Please enter a valid mobile number"
+msgstr ""
+
+#: backend/base/api/validators.py:19
+msgid "Mobile number length must be 10 digits"
+msgstr ""
+
+#: backend/base/api/validators.py:20
+msgid "Mobile number must starting with 6 or 7 or 8 or 9"
+msgstr ""
+
+#: backend/base/models.py:9
+msgid "created"
+msgstr ""
+
+#: backend/base/models.py:10
+msgid "modified"
+msgstr ""

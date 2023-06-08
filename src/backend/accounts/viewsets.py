@@ -880,7 +880,7 @@ class DoctorViewSet(ModelViewSet):
         content = {'success': 'User Deactivted successfully.'}
         return response.Ok(content)
     
-
+from django.utils.translation import ugettext_lazy as _
 class SocialMediaViewSet(ModelViewSet):
     queryset = SocialMedia.objects.all()
     permission_classes = (SocialMediaPermissions,)
@@ -906,16 +906,9 @@ class SocialMediaViewSet(ModelViewSet):
     def get_refercode(self, request):
         result={}
         result['refercode']=request.user.referer_code
+        result['name']=_('Your Text')
+        result['aa']=_('hello user')
+        result['aa']=_('prepare')
         return response.Ok(result)
             
 
-# the task for 7 Jun 2023
-# project name : BK AROGYAM
-# patient panel:
-# make get my refer code functionality 
-# make the curd functionality of review and add permission (only patients can give reviews)
-# doctor panel:
-# make the  curd functionality of Important Policies 
-# make the  curd functionality of Training Videos and Testing 
-# make video in slider
-# make get my refer code functionality 

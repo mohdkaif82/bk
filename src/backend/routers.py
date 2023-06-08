@@ -20,7 +20,7 @@ from .mlm_compensation.viewsets import PointsToBusinessAdvisorViewSet, ProductMa
 from .muster_roll.viewsets import HrSettingsViewSet, TasksViewSet
 from .patients.viewsets import PatientViewSet,SearchMedicanViewSet,SymptomsViewSet,DiseasesViewSet,\
     PatientProfileViewSet,ServiceViewSet,PatientManualReportViewSet,PatientAddFileViewSet,\
-    PatientReviewViewSet
+    PatientReviewViewSet,PatientQuestionViewSet
 from .practice.viewsets import PracticeViewSet, PracticeStaffViewSet, ExpensesViewSet, \
     VendorViewSet, ActivityLogViewSet, PracticeUserPermissionsViewSet, PushNotificationViewSet,NoticeBoardViewSet,\
     PolicyViewSet,TrainingVideoCategoryViewSet,TrainingVideoViewSet
@@ -67,7 +67,8 @@ restricted_router.register(r'patientsprofile', PatientProfileViewSet, basename='
 restricted_router.register(r'service',ServiceViewSet, basename='v1_service')
 restricted_router.register(r'PatientManualReport',PatientManualReportViewSet, basename='v1_PatientManualReport')
 restricted_router.register(r'patientaddfile',PatientAddFileViewSet, basename='v1_patientaddfile')
-restricted_router.register(r'patientreviewViewSet',PatientReviewViewSet, basename='v1_patient_review')
+restricted_router.register(r'patientreview',PatientReviewViewSet, basename='v1_patient_review')
+restricted_router.register(r'patientquestion',PatientQuestionViewSet, basename='v1_Patient_Question')
 
 #AllopathToAyurvedaViewSet
 restricted_router.register(r'searchmedican', SearchMedicanViewSet, basename='v1_searchmedican')

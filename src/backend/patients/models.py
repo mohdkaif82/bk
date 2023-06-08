@@ -652,3 +652,9 @@ class Review(models.Model):
     patient = models.ForeignKey(Patients, on_delete=models.PROTECT,null=True, blank=True)
     review_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class PatientQuestion(models.Model):
+    patient = models.ForeignKey(Patients, on_delete=models.PROTECT,null=True, blank=True)
+    question = models.CharField(max_length=800)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)

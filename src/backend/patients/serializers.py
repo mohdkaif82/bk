@@ -13,7 +13,7 @@ from .models import Patients, PatientGroups, PatientMedicalHistory, PersonalDoct
     PatientVitalSigns, PatientClinicNotes, PatientTreatmentPlans, Country, City, State, PatientFile, Source, \
     PatientPrescriptions, PatientMembership, PatientAdvice, PatientInventory, GeneratedPdf, PatientProcedure, \
     PatientNotes, MedicalCertificate, PatientCallNotes, ColdCalling, PatientAllopathicMedicines, PatientRegistration, \
-    AdvisorBank,Service,PatientManualReport,PatientAddFile,ProDocFile,Review
+    AdvisorBank,Service,PatientManualReport,PatientAddFile,ProDocFile,Review,PatientQuestion
 from ..practice.serializers import ProcedureCatalogSerializer, PracticeStaffSerializer, \
     PracticeStaffBasicSerializer, PracticeRefererSerializer, LabTestCatalogSerializer, MembershipSerializer, \
     PracticeBasicSerializer, RegistrationSerializer
@@ -700,3 +700,18 @@ class ReviewSerializer(ModelSerializer):
         else:
             raise serializers.ValidationError({"detail": "You are not allowed to make a review"})
         
+class PatientQuestionSerializer(ModelSerializer):
+    class Meta:
+        model = PatientQuestion
+        fields = '__all__'
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        patient=Patients.objects.filter(user=request.user)
+        if patient.exists():
+            patient=patient.first()
+            validated_data["patient"]=patient
+            obj=PatientQuestion.objects.create(**validated_data)
+            return obj
+        else:
+            raise serializers.ValidationError({"detail": "You are not allowed to rise questions"})

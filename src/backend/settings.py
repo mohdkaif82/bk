@@ -89,6 +89,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'backend.middlewares.LogAllMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -101,8 +102,19 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
+from django.utils.translation import gettext_lazy as _
 ROOT_URLCONF = 'backend.urls'
+LANGUAGES = [
+      ('en',('English')),
+      ('tr', ('Turkish')),
+      ('hi',('Hindi')),
+      ]
+
+LANGUAGE_CODE = 'en-us'
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR,"backend", 'locale'),
+  )
+DEFAULT_CHARSET = 'utf-8'
 
 TEMPLATES = [
     {
